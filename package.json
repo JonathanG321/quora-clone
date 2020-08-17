@@ -1,0 +1,37 @@
+{
+  "name": "quora-clone",
+  "version": "1.0.0",
+  "description": "## Technologies",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "db:create": "createdb --echo awesome_answers_dev",
+    "db:drop": "dropdb --if-exists --echo awesome_answers_dev",
+    "db:migrate": "node db/migrations.js",
+    "db:seed": "node db/seeds/index.js",
+    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanG321/quora-clone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JonathanG321/quora-clone/issues"
+  },
+  "homepage": "https://github.com/JonathanG321/quora-clone#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "connect-redis": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
+    "redis": "^3.0.2",
+    "sequelize": "^6.3.4"
+  }
+}
