@@ -12,7 +12,7 @@ const Question = sequelize.define('questions', {
     },
   },
   body: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
     validate: {
       notEmpty: {

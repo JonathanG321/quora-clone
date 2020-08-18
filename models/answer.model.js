@@ -3,7 +3,7 @@ const sequelize = require('../db/connection');
 
 const Answer = sequelize.define('answers', {
   body: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
     validate: {
       notEmpty: {
