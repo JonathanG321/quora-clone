@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const methodOverride = require('method-override');
+require('./db/client');
 
 const app = express();
 
