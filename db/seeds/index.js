@@ -1,1 +1,11 @@
-
+const sequelize = require('../client');
+const User = require('../../models/user.model');
+const Question = require('../../models/question.model');
+const Answer = require('../../models/answer.model');
+const Reply = require('../../models/reply.model');
+const Space = require('../../models/space.model');
+const Topic = require('../../models/topic.model');
+const Tag = require('../../models/tag.model');
+const Vote = require('../../models/vote.model');
+const Dislike = require('../../models/dislike.model');
+const faker = require('faker');
