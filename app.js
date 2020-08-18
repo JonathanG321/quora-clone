@@ -3,6 +3,8 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 require('./db/client');
 
+const apiRouter = require('./routers/api.router');
+
 const app = express();
 
 app.use(logger('dev'));
@@ -21,7 +23,7 @@ app.use(
   }),
 );
 
-// app.use('/api', apiRouter);
+app.use('/api', apiRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
