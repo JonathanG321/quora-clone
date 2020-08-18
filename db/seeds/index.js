@@ -32,6 +32,29 @@ async function seed() {
 
   const users = await User.findAll();
 
+  await Topic.bulkCreate(
+    Array.from({ length: randomBetween(4, 7) }).map(() => ({
+      name: faker.company.bsNoun(),
+      tagline: faker.lorem.sentence(),
+      description: faker.lorem.paragraphs(5),
+    })),
+  );
+
+  const topics = await Topic.findAll();
+
+  await Space.bulkCreate(
+    topics
+      .map((topic) =>
+        Array.from({ length: randomBetween(2, 5) }).map(() => ({
+          name: faker.company.bsNoun(),
+          topicId: topic.id,
+        })),
+      )
+      .flat(),
+  );
+
+  const spaces = await Space.findAll();
+
   await Question.bulkCreate(
     users
       .map((user) =>
@@ -39,6 +62,7 @@ async function seed() {
           title: faker.company.catchPhrase(),
           body: faker.lorem.paragraph(),
           userId: user.id,
+          spaceId: pickRandom(spaces).id,
         })),
       )
       .flat(),
@@ -73,29 +97,6 @@ async function seed() {
   );
 
   const replies = await Reply.findAll();
-
-  await Topic.bulkCreate(
-    Array.from({ length: randomBetween(4, 7) }).map(() => ({
-      name: faker.company.bsNoun(),
-      tagline: faker.lorem.sentence(),
-      description: faker.lorem.paragraphs(5),
-    })),
-  );
-
-  const topics = await Topic.findAll();
-
-  await Space.bulkCreate(
-    topics
-      .map((topic) =>
-        Array.from({ length: randomBetween(2, 5) }).map(() => ({
-          body: faker.lorem.paragraph(),
-          topicId: topic.id,
-        })),
-      )
-      .flat(),
-  );
-
-  const spaces = await Space.findAll();
 
   await Tag.bulkCreate(
     Array.from({ length: randomBetween(14, 17) }).map(() => ({
