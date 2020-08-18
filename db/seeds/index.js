@@ -63,7 +63,7 @@ async function seed() {
   await Reply.bulkCreate(
     answers
       .map((answer) =>
-        Array.from({ length: randomBetween(2, 5) }).map(() => ({
+        Array.from({ length: randomBetween(0, 5) }).map(() => ({
           body: faker.lorem.paragraph(),
           answerId: answer.id,
           userId: pickRandom(users).id,
@@ -77,12 +77,25 @@ async function seed() {
   await Topic.bulkCreate(
     Array.from({ length: randomBetween(4, 7) }).map(() => ({
       name: faker.company.bsNoun(),
-      tagline: faker.lorem.paragraph(),
+      tagline: faker.lorem.sentence(),
       description: faker.lorem.paragraphs(5),
     })),
   );
 
   const topics = await Topic.findAll();
+
+  await Space.bulkCreate(
+    topics
+      .map((topic) =>
+        Array.from({ length: randomBetween(2, 5) }).map(() => ({
+          body: faker.lorem.paragraph(),
+          topicId: topic.id,
+        })),
+      )
+      .flat(),
+  );
+
+  const spaces = await Space.findAll();
 
   await Tag.bulkCreate(
     Array.from({ length: randomBetween(14, 17) }).map(() => ({
@@ -91,6 +104,25 @@ async function seed() {
   );
 
   const tags = await Tag.findAll();
+
+  await Vote.bulkCreate(
+    Array.from({ length: randomBetween(100, 130) }).map(() => ({
+      isUpVote: faker.random.boolean(),
+      userId: pickRandom(users).id,
+      answerId: pickRandom(answers).id,
+    })),
+  );
+
+  const votes = await Vote.findAll();
+
+  await Dislike.bulkCreate(
+    Array.from({ length: randomBetween(10, 25) }).map(() => ({
+      userId: pickRandom(users).id,
+      answerId: pickRandom(answers).id,
+    })),
+  );
+
+  const dislikes = await Dislike.findAll();
 
   await Promise.all(
     questions.map((question) => {
@@ -101,12 +133,33 @@ async function seed() {
     }),
   );
 
+  await Promise.all(
+    users.map((user) => {
+      const userTopics = Array.from(
+        new Set(Array.from({ length: randomBetween(0, 3) }).map(() => pickRandom(tags))),
+      );
+      return user.addTopics(userTopics);
+    }),
+  );
+
+  await Promise.all(
+    users.map((user) => {
+      const userSpaces = Array.from(
+        new Set(Array.from({ length: randomBetween(0, 7) }).map(() => pickRandom(tags))),
+      );
+      return user.addSpaces(userSpaces);
+    }),
+  );
+
   printAmountOfModel('users', users.length);
   printAmountOfModel('questions', questions.length);
   printAmountOfModel('answers', answers.length);
   printAmountOfModel('replies', replies.length);
   printAmountOfModel('topics', topics.length);
+  printAmountOfModel('spaces', spaces.length);
   printAmountOfModel('tags', tags.length);
+  printAmountOfModel('votes', votes.length);
+  printAmountOfModel('dislikes', dislikes.length);
 }
 
 seed().then(() => {
