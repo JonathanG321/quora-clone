@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const ApiV1QuestionsController = require('../../../controllers/api/v1/questions.controller');
 const answersRouter = require('./answers.router');
+const dislikesRouter = require('./dislikes.router');
 
 const router = new Router();
 
@@ -15,5 +16,7 @@ router.patch('/:id', ApiV1QuestionsController.update);
 router.delete('/:id', ApiV1QuestionsController.destroy);
 
 router.use('/:id/answers', answersRouter);
+
+router.use('/:id/dislikes', dislikesRouter);
 
 module.exports = router;
