@@ -7,6 +7,7 @@ const RedisStore = require('connect-redis')(session);
 require('dotenv').config();
 require('./db/client');
 
+const Authentication = require('./middleware/authentication.middleware');
 const apiRouter = require('./routers/api.router');
 
 const redisClient = redis.createClient();
@@ -39,6 +40,8 @@ app.use(
     }
   }),
 );
+
+app.use(Authentication.setCurrentUser);
 
 app.use('/api', apiRouter);
 
