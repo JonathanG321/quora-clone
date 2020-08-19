@@ -36,8 +36,28 @@ const QuestionsController = {
       next(e);
     }
   },
-  async create(request, response, next) {},
-  async destroy(request, response, next) {},
+  async create(request, response, next) {
+    try {
+      const { title, body, tags, spaceId } = request.body;
+      const questionTags = await Tag.findAll({ where: { name: tags } });
+      const newQuestion = { title, body, userId: response.locals.currentUser.id, spaceId };
+      const question = await Question.create(newQuestion);
+      question.addTags(questionTags);
+      response.status(201).json(question);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async destroy(request, response, next) {
+    try {
+      const { id } = request.params;
+      Question.destroy({ where: { id } }).then(() => {
+        response.json({ status: 200, ok: true });
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 module.exports = QuestionsController;
