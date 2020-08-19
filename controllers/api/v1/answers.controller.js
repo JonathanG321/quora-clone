@@ -14,6 +14,16 @@ const AnswersController = {
       next(e);
     }
   },
+  async update(request, response, next) {
+    try {
+      const { body, id } = request.body;
+      const newAnswer = { body };
+      const answer = await Answer.create(newAnswer, { where: id });
+      response.status(201).json(answer);
+    } catch (e) {
+      next(e);
+    }
+  },
   async destroy(request, response, next) {
     try {
       const { id } = request.body;
