@@ -1,9 +1,15 @@
 const express = require('express');
 const logger = require('morgan');
 const methodOverride = require('method-override');
+const session = require('express-session');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(session);
+require('dotenv').config();
 require('./db/client');
 
 const apiRouter = require('./routers/api.router');
+
+const redisClient = redis.createClient();
 
 const app = express();
 
@@ -11,6 +17,17 @@ app.use(logger('dev'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+redisClient.on('error', console.error);
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new RedisStore({ client: redisClient }),
+  }),
+);
 
 app.use(
   methodOverride(function (req, res) {
