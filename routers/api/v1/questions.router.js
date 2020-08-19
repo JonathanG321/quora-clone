@@ -14,6 +14,6 @@ router.patch('/:id', ApiV1QuestionsController.update);
 
 router.delete('/:id', ApiV1QuestionsController.destroy);
 
-router.use('/:id', answersRouter);
+router.use('/:id/answers', answersRouter);
 
 module.exports = router;
