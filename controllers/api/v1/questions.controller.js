@@ -6,17 +6,6 @@ const Reply = require('../../../models/reply.model');
 const Tag = require('../../../models/tag.model');
 
 const QuestionsController = {
-  async index(request, response, next) {
-    try {
-      const questions = await Question.findAll({
-        order: [['createdAt', 'DESC']],
-        include: { model: User },
-      });
-      response.json(questions);
-    } catch (e) {
-      next(e);
-    }
-  },
   async show(request, response, next) {
     try {
       const { id } = request.params;
@@ -43,6 +32,19 @@ const QuestionsController = {
       const newQuestion = { title, body, userId: response.locals.currentUser.id, spaceId };
       const question = await Question.create(newQuestion);
       question.addTags(questionTags);
+      response.status(201).json(question);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async update(request, response, next) {
+    try {
+      const { title, body, tags } = request.body;
+      const { id } = request.params;
+      const questionTags = await Tag.findAll({ where: { name: tags } });
+      const newQuestion = { title, body };
+      const question = await Question.update(newQuestion, { where: id });
+      question.setTags(questionTags);
       response.status(201).json(question);
     } catch (e) {
       next(e);
