@@ -27,8 +27,8 @@ const AnswersController = {
   },
   async destroy(request, response, next) {
     try {
-      const { id } = request.body;
-      Answer.destroy({ where: { id } }).then(() => {
+      const { answerId } = request.body;
+      Answer.destroy({ where: { id: answerId } }).then(() => {
         response.json({ status: 200, ok: true });
       });
     } catch (e) {
