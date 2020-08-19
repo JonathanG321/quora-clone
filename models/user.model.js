@@ -42,6 +42,14 @@ const User = sequelize.define(
         },
       },
     },
+    isAdmin: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      validate: {
+        notNull: true,
+      },
+    },
     passwordDigest: {
       type: Sequelize.STRING,
       allowNull: false,
