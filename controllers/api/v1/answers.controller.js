@@ -14,7 +14,16 @@ const AnswersController = {
       next(e);
     }
   },
-  async destroy(request, response, next) {},
+  async destroy(request, response, next) {
+    try {
+      const { id } = request.body;
+      Answer.destroy({ where: { id } }).then(() => {
+        response.json({ status: 200, ok: true });
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 module.exports = AnswersController;
