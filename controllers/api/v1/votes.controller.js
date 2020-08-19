@@ -4,8 +4,8 @@ const Vote = require('../../../models/vote.model');
 const VotesController = {
   async create(request, response, next) {
     try {
-      const { id, isUpVote } = request.body;
-      const newVote = { userId: response.locals.currentUser.id, id, isUpVote };
+      const { answerId, isUpVote } = request.body;
+      const newVote = { userId: response.locals.currentUser.id, answerId, isUpVote };
       const vote = await Vote.create(newVote);
       response.status(201).json(vote);
     } catch (e) {
@@ -14,10 +14,10 @@ const VotesController = {
   },
   async update(request, response, next) {
     try {
-      const { id, isUpVote } = request.body;
+      const { answerId, isUpVote } = request.body;
       const newVote = { isUpVote };
       const vote = await Vote.update(newVote, {
-        where: { answerId: id, userId: response.locals.currentUser.id },
+        where: { answerId, userId: response.locals.currentUser.id },
       });
       response.status(201).json(vote);
     } catch (e) {
@@ -26,8 +26,8 @@ const VotesController = {
   },
   async destroy(request, response, next) {
     try {
-      const { id } = request.params;
-      Vote.destroy({ where: { answerId: id, userId: response.locals.currentUser.id } }).then(() => {
+      const { answerId } = request.params;
+      Vote.destroy({ where: { answerId, userId: response.locals.currentUser.id } }).then(() => {
         response.json({ status: 200, ok: true });
       });
     } catch (e) {
