@@ -19,6 +19,20 @@ module.exports = {
       next(e);
     }
   },
+  async update(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { firstName, lastName } = request.body;
+      const newUser = {
+        firstName,
+        lastName,
+      };
+      const user = await User.update(newUser, { where: id });
+      response.json({ user });
+    } catch (e) {
+      next(e);
+    }
+  },
   async currentUser(request, response, next) {
     try {
       response.json(response.locals.currentUser);
