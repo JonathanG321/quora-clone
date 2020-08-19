@@ -16,7 +16,8 @@ const AnswersController = {
   },
   async update(request, response, next) {
     try {
-      const { body, id } = request.body;
+      const { body } = request.body;
+      const { answerId: id } = request.params;
       const newAnswer = { body };
       const answer = await Answer.create(newAnswer, { where: id });
       response.status(201).json(answer);
