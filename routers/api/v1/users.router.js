@@ -5,8 +5,8 @@ const router = new Router();
 
 // /api/v1/users
 
-// router.post('/', ApiV1UsersController.create);
+router.post('/', ApiV1UsersController.create);
 
-// router.get('/current', ApiV1UsersController.currentUser);
+router.get('/current', ApiV1UsersController.currentUser);
 
 module.exports = router;
