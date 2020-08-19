@@ -7,6 +7,8 @@ const router = new Router();
 
 router.post('/', ApiV1AnswersController.create);
 
+router.patch('/:answerId', ApiV1AnswersController.update);
+
 router.delete('/:id', ApiV1AnswersController.destroy);
 
 module.exports = router;

@@ -6,11 +6,11 @@ const router = new Router();
 
 // /api/v1/questions
 
-router.get('/', ApiV1QuestionsController.index);
-
 router.get('/:id', ApiV1QuestionsController.show);
 
 router.post('/', ApiV1QuestionsController.create);
+
+router.patch('/:id', ApiV1QuestionsController.update);
 
 router.delete('/:id', ApiV1QuestionsController.destroy);
 
