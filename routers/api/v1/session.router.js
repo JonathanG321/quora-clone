@@ -5,8 +5,8 @@ const router = new Router();
 
 // /api/v1/session
 
-// router.post('/', ApiV1SessionController.create);
+router.post('/', ApiV1SessionController.create);
 
-// router.delete('/', ApiV1SessionController.destroy);
+router.delete('/', ApiV1SessionController.destroy);
 
 module.exports = router;
