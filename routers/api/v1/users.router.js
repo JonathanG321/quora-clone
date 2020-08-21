@@ -5,12 +5,12 @@ const router = new Router();
 
 // /api/v1/users
 
-router.get('/:id', ApiV1UsersController.show);
+router.get('/current', ApiV1UsersController.currentUser);
 
 router.post('/', ApiV1UsersController.create);
 
-router.patch('/:id', ApiV1UsersController.update);
+router.get('/:id', ApiV1UsersController.show);
 
-router.get('/current', ApiV1UsersController.currentUser);
+router.patch('/:id', ApiV1UsersController.update);
 
 module.exports = router;
