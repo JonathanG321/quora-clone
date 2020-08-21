@@ -18,8 +18,8 @@ const SpacesController = {
   },
   async create(request, response, next) {
     try {
-      const { title, tagline, description, topicId } = request.body;
-      const newSpace = { title, tagline, description, topicId };
+      const { name, tagline, description, topicId } = request.body;
+      const newSpace = { name, tagline, description, topicId };
       const space = await Space.create(newSpace);
       response.status(201).json(space);
     } catch (e) {
@@ -28,11 +28,11 @@ const SpacesController = {
   },
   async update(request, response, next) {
     try {
-      const { title, tagline, description } = request.body;
+      const { name, tagline, description } = request.body;
       const { id } = request.params;
-      const newSpace = { title, tagline, description };
-      await Space.update(newSpace, { where: id });
-      const space = await Space.findOne({ where: id });
+      const newSpace = { name, tagline, description };
+      await Space.update(newSpace, { where: { id } });
+      const space = await Space.findOne({ where: { id } });
       response.status(201).json(space);
     } catch (e) {
       next(e);
