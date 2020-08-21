@@ -14,8 +14,8 @@ const DislikesController = {
   },
   async destroy(request, response, next) {
     try {
-      const { id } = request.params;
-      Dislike.destroy({ where: { questionId: id, userId: response.locals.currentUser.id } }).then(
+      const { questionId } = request.params;
+      Dislike.destroy({ where: { questionId, userId: response.locals.currentUser.id } }).then(
         () => {
           response.json({ status: 200, ok: true });
         },
