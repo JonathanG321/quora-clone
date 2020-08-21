@@ -16,10 +16,10 @@ router.patch('/:id', ApiV1QuestionsController.update);
 
 router.delete('/:id', ApiV1QuestionsController.destroy);
 
-router.use('/:id/answers', answersRouter);
+router.use('/:questionId/answers', answersRouter);
 
-router.use('/:id/answers', votesRouter);
+router.use('/:questionId/answers', votesRouter);
 
-router.use('/:id/dislikes', dislikesRouter);
+router.use('/:questionId/dislikes', dislikesRouter);
 
 module.exports = router;

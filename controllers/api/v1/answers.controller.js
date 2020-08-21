@@ -6,8 +6,8 @@ const AnswersController = {
   async create(request, response, next) {
     try {
       const { body } = request.body;
-      const { id } = request.params;
-      const newAnswer = { body, userId: response.locals.currentUser.id, questionId: id };
+      const { questionId } = request.params;
+      const newAnswer = { body, userId: response.locals.currentUser.id, questionId };
       const answer = await Answer.create(newAnswer);
       response.status(201).json(answer);
     } catch (e) {
@@ -17,9 +17,10 @@ const AnswersController = {
   async update(request, response, next) {
     try {
       const { body } = request.body;
-      const { answerId: id } = request.params;
+      const { answerId } = request.params;
+      console.log(answerId);
       const newAnswer = { body };
-      const answer = await Answer.create(newAnswer, { where: id });
+      const answer = await Answer.update(newAnswer, { where: { id: answerId } });
       response.status(201).json(answer);
     } catch (e) {
       next(e);
@@ -27,7 +28,7 @@ const AnswersController = {
   },
   async destroy(request, response, next) {
     try {
-      const { answerId } = request.body;
+      const { answerId } = request.params;
       Answer.destroy({ where: { id: answerId } }).then(() => {
         response.json({ status: 200, ok: true });
       });
