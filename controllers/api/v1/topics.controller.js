@@ -17,7 +17,7 @@ const TopicsController = {
       const { id } = request.params;
       const topic = await Topic.findOne({
         where: { id },
-        include: [{ model: Space, include: { model: User } }, { model: User }],
+        include: { model: Space, include: { model: User } },
       });
       response.json(topic);
     } catch (e) {
@@ -26,11 +26,9 @@ const TopicsController = {
   },
   async create(request, response, next) {
     try {
-      const { title, body, tags, spaceId } = request.body;
-      const topicTags = await Tag.findAll({ where: { name: tags } });
-      const newTopic = { title, body, userId: response.locals.currentUser.id, spaceId };
+      const { title, tagline, description } = request.body;
+      const newTopic = { title, tagline, description };
       const topic = await Topic.create(newTopic);
-      topic.addTags(topicTags);
       response.status(201).json(topic);
     } catch (e) {
       next(e);
@@ -38,12 +36,11 @@ const TopicsController = {
   },
   async update(request, response, next) {
     try {
-      const { title, body, tags } = request.body;
+      const { title, tagline, description } = request.body;
       const { id } = request.params;
-      const topicTags = await Tag.findAll({ where: { name: tags } });
-      const newTopic = { title, body };
-      const topic = await Topic.update(newTopic, { where: id });
-      topic.setTags(topicTags);
+      const newTopic = { title, tagline, description };
+      await Topic.update(newTopic, { where: id });
+      const topic = await Topic.findOne({ where: id });
       response.status(201).json(topic);
     } catch (e) {
       next(e);
