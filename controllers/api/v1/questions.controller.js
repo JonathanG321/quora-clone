@@ -43,7 +43,7 @@ const QuestionsController = {
       const { id } = request.params;
       const questionTags = await Tag.findAll({ where: { name: tags } });
       const newQuestion = { title, body };
-      const question = await Question.update(newQuestion, { where: id });
+      const question = await Question.update(newQuestion, { where: { id } });
       question.setTags(questionTags);
       response.status(201).json(question);
     } catch (e) {
