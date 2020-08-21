@@ -18,8 +18,8 @@ const SpacesController = {
   },
   async create(request, response, next) {
     try {
-      const { title, tagline, description } = request.body;
-      const newSpace = { title, tagline, description };
+      const { title, tagline, description, topicId } = request.body;
+      const newSpace = { title, tagline, description, topicId };
       const space = await Space.create(newSpace);
       response.status(201).json(space);
     } catch (e) {
