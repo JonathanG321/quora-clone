@@ -8,9 +8,9 @@ const router = new Router({ mergeParams: true });
 
 router.post('/', ApiV1AnswersController.create);
 
-router.patch('/:answerId', ApiV1AnswersController.update);
+router.patch('/:id', ApiV1AnswersController.update);
 
-router.delete('/:answerId', ApiV1AnswersController.destroy);
+router.delete('/:id', ApiV1AnswersController.destroy);
 
 router.use('/:answerId/replies', repliesRouter);
 

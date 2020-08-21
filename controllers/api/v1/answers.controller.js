@@ -17,10 +17,9 @@ const AnswersController = {
   async update(request, response, next) {
     try {
       const { body } = request.body;
-      const { answerId } = request.params;
-      console.log(answerId);
+      const { id } = request.params;
       const newAnswer = { body };
-      const answer = await Answer.update(newAnswer, { where: { id: answerId } });
+      const answer = await Answer.update(newAnswer, { where: { id } });
       response.status(201).json(answer);
     } catch (e) {
       next(e);
@@ -28,8 +27,8 @@ const AnswersController = {
   },
   async destroy(request, response, next) {
     try {
-      const { answerId } = request.params;
-      Answer.destroy({ where: { id: answerId } }).then(() => {
+      const { id } = request.params;
+      Answer.destroy({ where: { id } }).then(() => {
         response.json({ status: 200, ok: true });
       });
     } catch (e) {
