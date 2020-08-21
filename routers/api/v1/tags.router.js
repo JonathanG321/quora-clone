@@ -7,8 +7,8 @@ const router = new Router();
 
 router.get('/', ApiV1TagsController.index);
 
-router.post('/', ApiV1TagsController.create);
+router.get('/:id', ApiV1TagsController.show);
 
-router.post('/:id', ApiV1TagsController.show);
+router.post('/', ApiV1TagsController.create);
 
 module.exports = router;
