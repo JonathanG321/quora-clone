@@ -31,7 +31,7 @@ const QuestionsController = {
       const questionTags = await Tag.findAll({ where: { name: tags } });
       const newQuestion = { title, body, userId: response.locals.currentUser.id, spaceId };
       const question = await Question.create(newQuestion);
-      question.addTags(questionTags);
+      await question.addTags(questionTags);
       response.status(201).json(question);
     } catch (e) {
       next(e);
@@ -41,10 +41,13 @@ const QuestionsController = {
     try {
       const { title, body, tags } = request.body;
       const { id } = request.params;
+      const question = await Question.findOne({ where: { id } });
       const questionTags = await Tag.findAll({ where: { name: tags } });
       const newQuestion = { title, body };
-      const question = await Question.update(newQuestion, { where: { id } });
-      question.setTags(questionTags);
+      await question.update(newQuestion, { where: { id } });
+      await question.setTags(questionTags, {
+        through: 'questionTags',
+      });
       response.status(201).json(question);
     } catch (e) {
       next(e);
