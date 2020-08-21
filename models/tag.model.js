@@ -5,6 +5,7 @@ const Tag = sequelize.define('tags', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true,
     validate: {
       async isUnique(name) {
         const tag = await Tag.findOne({ where: { name } });
