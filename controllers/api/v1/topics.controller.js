@@ -26,8 +26,8 @@ const TopicsController = {
   },
   async create(request, response, next) {
     try {
-      const { title, tagline, description } = request.body;
-      const newTopic = { title, tagline, description };
+      const { name, tagline, description } = request.body;
+      const newTopic = { name, tagline, description };
       const topic = await Topic.create(newTopic);
       response.status(201).json(topic);
     } catch (e) {
@@ -36,11 +36,11 @@ const TopicsController = {
   },
   async update(request, response, next) {
     try {
-      const { title, tagline, description } = request.body;
+      const { name, tagline, description } = request.body;
       const { id } = request.params;
-      const newTopic = { title, tagline, description };
-      await Topic.update(newTopic, { where: id });
-      const topic = await Topic.findOne({ where: id });
+      const newTopic = { name, tagline, description };
+      await Topic.update(newTopic, { where: { id } });
+      const topic = await Topic.findOne({ where: { id } });
       response.status(201).json(topic);
     } catch (e) {
       next(e);
