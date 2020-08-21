@@ -98,11 +98,23 @@ async function seed() {
 
   const replies = await Reply.findAll();
 
-  await Tag.bulkCreate(
-    Array.from({ length: randomBetween(14, 17) }).map(() => ({
-      name: faker.company.bsNoun(),
-    })),
-  );
+  try {
+    await Array.from({ length: randomBetween(14, 17) })
+      .map(() => ({
+        name: faker.company.bsNoun(),
+      }))
+      .reduce(async (acc, tag) => {
+        try {
+          await acc;
+          return Tag.create(tag);
+        } catch (e) {
+          console.error(e);
+          return Tag.create(tag);
+        }
+      }, Promise.resolve());
+  } catch (e) {
+    console.error(e);
+  }
 
   const tags = await Tag.findAll();
 
