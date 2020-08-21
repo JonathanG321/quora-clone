@@ -3,12 +3,12 @@ const ApiV1VotesController = require('../../../controllers/api/v1/votes.controll
 
 const router = new Router();
 
-// /api/v1/questions/:id/answers
+// /api/v1/questions/:questionId/answers/:answerId/votes
 
-router.post('/:answerId', ApiV1VotesController.create);
+router.post('/', ApiV1VotesController.create);
 
-router.patch('/:answerId', ApiV1VotesController.update);
+router.patch('/:id', ApiV1VotesController.update);
 
-router.delete('/:answerId', ApiV1VotesController.destroy);
+router.delete('/:id', ApiV1VotesController.destroy);
 
 module.exports = router;
