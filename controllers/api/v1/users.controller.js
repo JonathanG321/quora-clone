@@ -36,7 +36,7 @@ module.exports = {
   async show(request, response, next) {
     try {
       const { id } = request.params;
-      const user = await User.findOne({ where: id });
+      const user = await User.findOne({ where: { id } });
       response.json({ user });
     } catch (e) {
       next(e);
