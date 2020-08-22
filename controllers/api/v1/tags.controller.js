@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const User = require('../../../models/user.model');
 const Question = require('../../../models/question.model');
 const Tag = require('../../../models/tag.model');
+const { RecordNotFoundError } = require('../../api.controller');
 
 const TagsController = {
   async index(request, response, next) {
@@ -24,6 +25,9 @@ const TagsController = {
           },
         ],
       });
+      if (!tag) {
+        throw new RecordNotFoundError(Tag, id);
+      }
       response.json(tag);
     } catch (e) {
       next(e);

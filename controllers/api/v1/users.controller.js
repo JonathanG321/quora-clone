@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const User = require('../../../models/user.model');
+const { RecordNotFoundError } = require('../../api.controller');
 
 module.exports = {
   async create(request, response, next) {
@@ -37,6 +38,9 @@ module.exports = {
     try {
       const { id } = request.params;
       const user = await User.findOne({ where: { id } });
+      if (!user) {
+        throw new RecordNotFoundError(User, id);
+      }
       response.json({ user });
     } catch (e) {
       next(e);

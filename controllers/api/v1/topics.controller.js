@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const Topic = require('../../../models/topic.model');
 const Space = require('../../../models/space.model');
 const User = require('../../../models/user.model');
+const { RecordNotFoundError } = require('../../api.controller');
 
 const TopicsController = {
   async index(request, response, next) {
@@ -19,6 +20,9 @@ const TopicsController = {
         where: { id },
         include: { model: Space, include: { model: User } },
       });
+      if (!topic) {
+        throw new RecordNotFoundError(Topic, id);
+      }
       response.json(topic);
     } catch (e) {
       next(e);

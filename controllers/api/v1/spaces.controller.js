@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const Space = require('../../../models/space.model');
 const Question = require('../../../models/question.model');
 const User = require('../../../models/user.model');
+const { RecordNotFoundError } = require('../../api.controller');
 
 const SpacesController = {
   async show(request, response, next) {
@@ -11,6 +12,9 @@ const SpacesController = {
         where: { id },
         include: [{ model: Question, include: { model: User } }, { model: User }],
       });
+      if (!space) {
+        throw new RecordNotFoundError(Space, id);
+      }
       response.json(space);
     } catch (e) {
       next(e);

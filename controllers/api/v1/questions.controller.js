@@ -4,6 +4,7 @@ const User = require('../../../models/user.model');
 const Answer = require('../../../models/answer.model');
 const Reply = require('../../../models/reply.model');
 const Tag = require('../../../models/tag.model');
+const { RecordNotFoundError } = require('../../api.controller');
 
 const QuestionsController = {
   async show(request, response, next) {
@@ -20,6 +21,9 @@ const QuestionsController = {
           { model: Tag },
         ],
       });
+      if (!question) {
+        throw new RecordNotFoundError(Question, id);
+      }
       response.json(question);
     } catch (e) {
       next(e);
