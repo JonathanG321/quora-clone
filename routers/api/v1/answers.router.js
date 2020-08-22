@@ -2,6 +2,7 @@ const Router = require('express').Router;
 const ApiV1AnswersController = require('../../../controllers/api/v1/answers.controller');
 const repliesRouter = require('./replies.router');
 const votesRouter = require('./votes.router');
+const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 
 const router = new Router({ mergeParams: true });
 
@@ -10,6 +11,8 @@ const router = new Router({ mergeParams: true });
 router.use('/:answerId/replies', repliesRouter);
 
 router.use('/:answerId/votes', votesRouter);
+
+router.use(Authentication.authenticate);
 
 router.post('/', ApiV1AnswersController.create);
 
