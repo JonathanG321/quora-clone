@@ -1,6 +1,9 @@
 const Router = require('express').Router;
 const ApiV1DislikesController = require('../../../controllers/api/v1/dislikes.controller');
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
+const Authorization = require('../../../middleware/authorization.middleware');
+const Question = require('../../../models/question.model');
+const QuestionPermissions = require('../../../models/permissions/questions');
 
 const router = new Router({ mergeParams: true });
 
@@ -8,8 +11,16 @@ const router = new Router({ mergeParams: true });
 
 router.use(Authentication.authenticate);
 
-router.post('/', ApiV1DislikesController.create);
+router.post(
+  '/',
+  Authorization.authorize(QuestionPermissions, 'dislike', Question),
+  ApiV1DislikesController.create,
+);
 
-router.delete('/', ApiV1DislikesController.destroy);
+router.delete(
+  '/',
+  Authorization.authorize(QuestionPermissions, 'dislike', Question),
+  ApiV1DislikesController.destroy,
+);
 
 module.exports = router;
