@@ -23,6 +23,13 @@ const Authentication = {
       }
     }
   },
+  authenticate(request, response, next) {
+    if (!response.locals.currentUser.id) {
+      response.redirect('/session/new');
+    } else {
+      next();
+    }
+  },
 };
 
 class NoSessionError extends Error {}
