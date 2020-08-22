@@ -4,9 +4,13 @@ const Vote = require('../../../models/vote.model');
 const VotesController = {
   async create(request, response, next) {
     try {
-      const { answerId, isUpVote } = request.body;
+      const { isUpVote } = request.body;
+      const { answerId } = request.params;
       const newVote = { userId: response.locals.currentUser.id, answerId, isUpVote };
-      const vote = await Vote.create(newVote);
+      await Vote.create(newVote);
+      const vote = await Vote.findOne({
+        where: { userId: response.locals.currentUser.id, answerId },
+      });
       response.status(201).json(vote);
     } catch (e) {
       next(e);
@@ -14,9 +18,13 @@ const VotesController = {
   },
   async update(request, response, next) {
     try {
-      const { answerId, isUpVote } = request.body;
+      const { isUpVote } = request.body;
+      const { answerId } = request.params;
       const newVote = { isUpVote };
-      const vote = await Vote.update(newVote, {
+      await Vote.update(newVote, {
+        where: { answerId, userId: response.locals.currentUser.id },
+      });
+      const vote = await Vote.findOne({
         where: { answerId, userId: response.locals.currentUser.id },
       });
       response.status(201).json(vote);
