@@ -7,7 +7,7 @@ function can(user, action, answer) {
       return canEdit(user, answer);
     case 'delete':
       return canDelete(user, answer);
-    case 'like':
+    case 'vote':
       return canVote(user, answer);
     case 'manage':
       return canManage(user, answer);
