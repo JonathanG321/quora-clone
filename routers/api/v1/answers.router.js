@@ -7,14 +7,14 @@ const router = new Router({ mergeParams: true });
 
 // /api/v1/questions/:questionId/answers
 
+router.use('/:answerId/replies', repliesRouter);
+
+router.use('/:answerId/votes', votesRouter);
+
 router.post('/', ApiV1AnswersController.create);
 
 router.patch('/:id', ApiV1AnswersController.update);
 
 router.delete('/:id', ApiV1AnswersController.destroy);
-
-router.use('/:answerId/replies', repliesRouter);
-
-router.use('/:answerId/votes', votesRouter);
 
 module.exports = router;

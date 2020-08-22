@@ -1,14 +1,14 @@
 const Router = require('express').Router;
-const ApiV1AnswersController = require('../../../controllers/api/v1/answers.controller');
+const ApiV1RepliesController = require('../../../controllers/api/v1/replies.controller');
 
-const router = new Router();
+const router = new Router({ mergeParams: true });
 
-// /api/v1/questions/:id/answers/:answerId/replies
+// /api/v1/questions/:questionId/answers/:answerId/replies
 
-router.post('/', ApiV1AnswersController.create);
+router.post('/', ApiV1RepliesController.create);
 
-router.patch('/:replyId', ApiV1AnswersController.update);
+router.patch('/:id', ApiV1RepliesController.update);
 
-router.delete('/:replyId', ApiV1AnswersController.destroy);
+router.delete('/:id', ApiV1RepliesController.destroy);
 
 module.exports = router;

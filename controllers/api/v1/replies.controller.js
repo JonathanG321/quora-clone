@@ -6,6 +6,7 @@ const RepliesController = {
     try {
       const { body } = request.body;
       const { id } = request.params;
+      console.log(request.params);
       const newReply = { body, userId: response.locals.currentUser.id, answerId: id };
       const reply = await Reply.create(newReply);
       response.status(201).json(reply);
