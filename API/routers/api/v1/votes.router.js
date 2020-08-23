@@ -3,7 +3,6 @@ const ApiV1VotesController = require('../../../controllers/api/v1/votes.controll
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 const Authorization = require('../../../middleware/authorization.middleware');
 const Answer = require('../../../models/answer.model');
-const AnswerPermissions = require('../../../models/permissions/answers');
 
 const router = new Router({ mergeParams: true });
 
@@ -13,19 +12,19 @@ router.use(Authentication.authenticate);
 
 router.post(
   '/',
-  Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
   ApiV1VotesController.create,
 );
 
 router.patch(
   '/',
-  Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
   ApiV1VotesController.update,
 );
 
 router.delete(
   '/',
-  Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
   ApiV1VotesController.destroy,
 );
 

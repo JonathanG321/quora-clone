@@ -5,7 +5,6 @@ const dislikesRouter = require('./dislikes.router');
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 const Authorization = require('../../../middleware/authorization.middleware');
 const Question = require('../../../models/question.model');
-const QuestionPermissions = require('../../../models/permissions/questions');
 
 const router = new Router();
 
@@ -23,14 +22,19 @@ router.post('/', ApiV1QuestionsController.create);
 
 router.patch(
   '/:id',
-  Authorization.authorize(QuestionPermissions, 'edit', Question),
+  // Authorization.authorize(QuestionPermissions, 'edit', Question),
   ApiV1QuestionsController.update,
 );
 
 router.delete(
   '/:id',
-  Authorization.authorize(QuestionPermissions, 'delete', Question),
+  Authorization.authorizeCurrentUser('delete', getQuestion),
   ApiV1QuestionsController.destroy,
 );
+
+function getQuestion(request) {
+  const { id } = request.params;
+  return Question.findOne({ where: { id } });
+}
 
 module.exports = router;

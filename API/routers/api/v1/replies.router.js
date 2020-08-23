@@ -3,7 +3,6 @@ const ApiV1RepliesController = require('../../../controllers/api/v1/replies.cont
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 const Authorization = require('../../../middleware/authorization.middleware');
 const Reply = require('../../../models/reply.model');
-const ReplyPermissions = require('../../../models/permissions/replies');
 
 const router = new Router({ mergeParams: true });
 
@@ -15,13 +14,13 @@ router.post('/', ApiV1RepliesController.create);
 
 router.patch(
   '/:id',
-  Authorization.authorize(ReplyPermissions, 'edit', Reply),
+  // Authorization.authorize(ReplyPermissions, 'edit', Reply),
   ApiV1RepliesController.update,
 );
 
 router.delete(
   '/:id',
-  Authorization.authorize(ReplyPermissions, 'delete', Reply),
+  // Authorization.authorize(ReplyPermissions, 'delete', Reply),
   ApiV1RepliesController.destroy,
 );
 

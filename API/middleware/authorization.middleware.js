@@ -1,17 +1,20 @@
-const User = require('../models/user.model');
+const { can } = require('../lib/permissions');
 
 const Authorization = {
-  authorize(Permission, action, Model) {
-    return (request, response, next) => {
+  authorizeCurrentUser(action, getModel, ...getOtherModels) {
+    return async (request, response, next) => {
       const { currentUser } = response.locals;
-      const { id } = request.params;
-      Model.findOne({ where: { id }, include: [{ model: User }] }).then((model) => {
-        if (Permission.cannot(currentUser, action, model)) {
-          response.redirect('/');
-        } else {
-          next();
-        }
-      });
+      const allowed = await can(
+        currentUser,
+        action,
+        await getModel(request),
+        await Promise.all(getOtherModels.map((getOtherModel) => getOtherModel(request))),
+      );
+      if (allowed) {
+        next();
+      } else {
+        response.status(403).send();
+      }
     };
   },
 };

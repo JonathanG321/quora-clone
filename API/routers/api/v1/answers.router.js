@@ -5,7 +5,6 @@ const votesRouter = require('./votes.router');
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 const Authorization = require('../../../middleware/authorization.middleware');
 const Answer = require('../../../models/answer.model');
-const AnswerPermissions = require('../../../models/permissions/answers');
 
 const router = new Router({ mergeParams: true });
 
@@ -21,13 +20,13 @@ router.post('/', ApiV1AnswersController.create);
 
 router.patch(
   '/:id',
-  Authorization.authorize(AnswerPermissions, 'edit', Answer),
+  // Authorization.authorize(AnswerPermissions, 'edit', Answer),
   ApiV1AnswersController.update,
 );
 
 router.delete(
   '/:id',
-  Authorization.authorize(AnswerPermissions, 'delete', Answer),
+  // Authorization.authorize(AnswerPermissions, 'delete', Answer),
   ApiV1AnswersController.destroy,
 );
 
