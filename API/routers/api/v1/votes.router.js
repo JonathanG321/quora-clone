@@ -2,7 +2,7 @@ const Router = require('express').Router;
 const ApiV1VotesController = require('../../../controllers/api/v1/votes.controller');
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
 const Authorization = require('../../../middleware/authorization.middleware');
-const Answer = require('../../../models/answer.model');
+const Vote = require('../../../models/vote.model');
 
 const router = new Router({ mergeParams: true });
 
@@ -12,20 +12,25 @@ router.use(Authentication.authenticate);
 
 router.post(
   '/',
-  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  Authorization.authorizeCurrentUser('delete', () => new Vote()),
   ApiV1VotesController.create,
 );
 
 router.patch(
   '/',
-  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  Authorization.authorizeCurrentUser('delete', getVote),
   ApiV1VotesController.update,
 );
 
 router.delete(
   '/',
-  // Authorization.authorize(AnswerPermissions, 'vote', Answer),
+  Authorization.authorizeCurrentUser('delete', getVote),
   ApiV1VotesController.destroy,
 );
+
+function getVote(request, response) {
+  const { id } = request.params;
+  return Vote.findOne({ where: { userId: response.locals.currentUser.id, answerId: id } });
+}
 
 module.exports = router;

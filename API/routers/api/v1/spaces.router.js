@@ -1,6 +1,8 @@
 const Router = require('express').Router;
 const ApiV1SpacesController = require('../../../controllers/api/v1/spaces.controller');
 const Authentication = require('../../../middleware/api/v1/authentication.middleware');
+const Authorization = require('../../../middleware/authorization.middleware');
+const Space = require('../../../models/space.model');
 
 const router = new Router();
 
@@ -10,10 +12,27 @@ router.get('/:id', ApiV1SpacesController.show);
 
 router.use(Authentication.authenticate);
 
-router.post('/', ApiV1SpacesController.create);
+router.post(
+  '/',
+  Authorization.authorizeCurrentUser('create', () => new Space()),
+  ApiV1SpacesController.create,
+);
 
-router.patch('/:id', ApiV1SpacesController.update);
+router.patch(
+  '/:id',
+  Authorization.authorizeCurrentUser('edit', getSpace),
+  ApiV1SpacesController.update,
+);
 
-router.delete('/:id', ApiV1SpacesController.destroy);
+router.delete(
+  '/:id',
+  Authorization.authorizeCurrentUser('delete', getSpace),
+  ApiV1SpacesController.destroy,
+);
+
+function getSpace(request) {
+  const { id } = request.params;
+  return Space.findOne({ where: { id } });
+}
 
 module.exports = router;
