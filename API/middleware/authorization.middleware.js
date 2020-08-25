@@ -7,8 +7,8 @@ const Authorization = {
       const allowed = await can(
         currentUser,
         action,
-        await getModel(request),
-        await Promise.all(getOtherModels.map((getOtherModel) => getOtherModel(request))),
+        await getModel(request, response),
+        await Promise.all(getOtherModels.map((getOtherModel) => getOtherModel(request, response))),
       );
       if (allowed) {
         next();
