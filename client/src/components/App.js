@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NavBar from './NavBar';
 import { HomePage, NotFoundPage } from './pages';
 import AuthRoute from './common/AuthRoute';
-import Loading from './components/common/Loading';
+import Loading from '../components/common/Loading';
 import { User } from '../requests/user';
 
 const initialState = { user: null, loading: true };
@@ -30,9 +30,9 @@ class App extends Component {
   }
   render() {
     const { user, loading } = this.state;
-    if (loading) {
-      return <Loading />;
-    }
+    // if (loading) {
+    //   return <Loading />;
+    // }
     return (
       <div className="App">
         <Router>
