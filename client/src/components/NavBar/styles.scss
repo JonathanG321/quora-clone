@@ -1,0 +1,28 @@
+a.active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.right {
+  float: right;
+  display: flex;
+  > *:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+.main {
+  float: right;
+  background-color: red;
+  > .sub {
+    margin-right: 10px;
+    background-color: blue;
+  }
+}
+
+.right {
+  float: right;
+  display: flex;
+}
+
+.right > *:not(:last-child) {
+  margin-right: 10px;
+}
