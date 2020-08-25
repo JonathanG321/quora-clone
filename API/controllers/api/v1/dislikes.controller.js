@@ -4,10 +4,10 @@ const Dislike = require('../../../models/dislike.model');
 const DislikesController = {
   async create(request, response, next) {
     try {
-      const { id } = request.params;
-      const newDislike = { userId: response.locals.currentUser.id, id };
-      const vote = await Dislike.create(newDislike);
-      response.status(201).json(vote);
+      const { questionId } = request.params;
+      const newDislike = { userId: response.locals.currentUser.id, questionId };
+      const dislike = await Dislike.create(newDislike);
+      response.status(201).json(dislike);
     } catch (e) {
       next(e);
     }

@@ -12,15 +12,11 @@ router.use(Authentication.authenticate);
 
 router.post(
   '/',
-  Authorization.authorizeCurrentUser('delete', () => new Vote()),
+  Authorization.authorizeCurrentUser('create', () => new Vote()),
   ApiV1VotesController.create,
 );
 
-router.patch(
-  '/',
-  Authorization.authorizeCurrentUser('delete', getVote),
-  ApiV1VotesController.update,
-);
+router.patch('/', Authorization.authorizeCurrentUser('edit', getVote), ApiV1VotesController.update);
 
 router.delete(
   '/',
@@ -29,8 +25,8 @@ router.delete(
 );
 
 function getVote(request, response) {
-  const { id } = request.params;
-  return Vote.findOne({ where: { userId: response.locals.currentUser.id, answerId: id } });
+  const { answerId } = request.params;
+  return Vote.findOne({ where: { userId: response.locals.currentUser.id, answerId } });
 }
 
 module.exports = router;

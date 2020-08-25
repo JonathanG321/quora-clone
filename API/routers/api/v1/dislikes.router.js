@@ -6,7 +6,7 @@ const Dislike = require('../../../models/dislike.model');
 
 const router = new Router({ mergeParams: true });
 
-// /api/v1/questions/:id/dislikes
+// /api/v1/questions/:questionId/dislikes
 
 router.use(Authentication.authenticate);
 
@@ -23,8 +23,8 @@ router.delete(
 );
 
 function getDislike(request, response) {
-  const { id } = request.params;
-  return Dislike.findOne({ where: { userId: response.locals.currentUser.id, questionId: id } });
+  const { questionId } = request.params;
+  return Dislike.findOne({ where: { userId: response.locals.currentUser.id, questionId } });
 }
 
 module.exports = router;
