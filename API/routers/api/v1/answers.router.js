@@ -16,18 +16,27 @@ router.use('/:answerId/votes', votesRouter);
 
 router.use(Authentication.authenticate);
 
-router.post('/', ApiV1AnswersController.create);
+router.post(
+  '/',
+  Authorization.authorizeCurrentUser('create', () => new Answer()),
+  ApiV1AnswersController.create,
+);
 
 router.patch(
   '/:id',
-  // Authorization.authorize(AnswerPermissions, 'edit', Answer),
+  Authorization.authorizeCurrentUser('edit', getAnswer),
   ApiV1AnswersController.update,
 );
 
 router.delete(
   '/:id',
-  // Authorization.authorize(AnswerPermissions, 'delete', Answer),
+  Authorization.authorizeCurrentUser('delete', getAnswer),
   ApiV1AnswersController.destroy,
 );
+
+function getAnswer(request) {
+  const { id } = request.params;
+  return Answer.findOne({ where: { id } });
+}
 
 module.exports = router;

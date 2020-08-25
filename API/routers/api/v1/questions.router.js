@@ -18,11 +18,15 @@ router.get('/:id', ApiV1QuestionsController.show);
 
 router.use(Authentication.authenticate);
 
-router.post('/', ApiV1QuestionsController.create);
+router.post(
+  '/',
+  Authorization.authorizeCurrentUser('create', () => new Question()),
+  ApiV1QuestionsController.create,
+);
 
 router.patch(
   '/:id',
-  // Authorization.authorize(QuestionPermissions, 'edit', Question),
+  Authorization.authorizeCurrentUser('edit', getQuestion),
   ApiV1QuestionsController.update,
 );
 

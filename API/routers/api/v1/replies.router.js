@@ -10,18 +10,27 @@ const router = new Router({ mergeParams: true });
 
 router.use(Authentication.authenticate);
 
-router.post('/', ApiV1RepliesController.create);
+router.post(
+  '/',
+  Authorization.authorizeCurrentUser('create', () => new Reply()),
+  ApiV1RepliesController.create,
+);
 
 router.patch(
   '/:id',
-  // Authorization.authorize(ReplyPermissions, 'edit', Reply),
+  Authorization.authorizeCurrentUser('edit', getReply),
   ApiV1RepliesController.update,
 );
 
 router.delete(
   '/:id',
-  // Authorization.authorize(ReplyPermissions, 'delete', Reply),
+  Authorization.authorizeCurrentUser('delete', getReply),
   ApiV1RepliesController.destroy,
 );
+
+function getReply(request) {
+  const { id } = request.params;
+  return Reply.findOne({ where: { id } });
+}
 
 module.exports = router;
