@@ -2,7 +2,7 @@ import { API_URL, jsonHeaders } from './base';
 
 export const User = {
   getCurrentUser() {
-    return fetch(`http://localhost:3000/api/v1/users/current`, {
+    return fetch(`${API_URL}/users/current`, {
       credentials: 'include',
     }).then((res) => res.json());
   },
