@@ -1,28 +1,18 @@
-a.active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.right {
-  float: right;
-  display: flex;
-  > *:not(:last-child) {
-    margin-right: 10px;
+.nav-item {
+  color: rgba(0, 0, 0, 0.5);
+  .active {
+    color: rgba(185, 43, 39, 1);
+    border-bottom: 2px solid rgba(185, 43, 39, 1);
+  }
+  a {
+    color: rgba(0, 0, 0, 0.5);
   }
 }
-.main {
-  float: right;
-  background-color: red;
-  > .sub {
-    margin-right: 10px;
-    background-color: blue;
-  }
+.nav-item:hover {
+  color: rgba(0, 0, 0, 0.5);
+  background-color: #00000008;
 }
 
-.right {
-  float: right;
-  display: flex;
-}
-
-.right > *:not(:last-child) {
-  margin-right: 10px;
+.navbar {
+  padding: 0px;
 }
