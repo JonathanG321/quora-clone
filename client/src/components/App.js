@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NavBar from './NavBar';
-import { HomePage, NotFoundPage } from './pages';
-import AuthRoute from './common/AuthRoute';
+import { HomePage, NotFoundPage, SignInPage, QuestionsShowPage } from './pages';
+// import AuthRoute from './common/AuthRoute';
 import Loading from '../components/common/Loading';
 import { User } from '../requests/user';
 
-const initialState = { user: null, loading: true };
+const initialState = { user: null };
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = initialState;
+    this.state = {
+      ...initialState,
+      loading: true,
+    };
+    this.signIn = this.signIn.bind(this);
+    this.signOut = this.signOut.bind(this);
   }
   componentDidMount() {
     this.signIn();
@@ -30,16 +35,22 @@ class App extends Component {
   }
   render() {
     const { user, loading } = this.state;
-    // if (loading) {
-    //   return <Loading />;
-    // }
+    if (loading) {
+      return <Loading />;
+    }
     return (
       <div className="App">
         <Router>
-          <NavBar />
+          <NavBar onSignOut={this.signOut} user={user} />
           <Switch>
             <Route exact path="/">
               <HomePage />
+            </Route>
+            <Route exact path="/sign-in">
+              <SignInPage onSignIn={this.signIn} />
+            </Route>
+            <Route path="/questions/:id">
+              <QuestionsShowPage />
             </Route>
             <Route path="*">
               <NotFoundPage />
