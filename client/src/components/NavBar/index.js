@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { withRouterPropTypes } from '../../PropTypes/withRouterPropTypes';
 import { Session } from '../../requests/session';
-import './styles.scss';
 import Fa from '../common/Fa';
+import './styles.scss';
 
 function NavBar(props) {
   const { user, onSignOut } = props;
@@ -18,31 +18,31 @@ function NavBar(props) {
     });
   }
   return (
-    <nav className="nav navbar navbar-light bg-light flex justify-content-center">
+    <nav className="nav navbar navbar-light bg-light flex justify-content-center navbar-shadow">
       <div className="navbar-brand">
         <strong>Quora</strong>
       </div>
       <div className="nav-item">
         <NavLink className="nav-link align-items-center d-flex" exact to="/">
-          <Fa kind={'home'} size="2x" color="#7b7b7d" />
+          <Fa kind={'home'} size="lg" color="#7b7b7d" />
           <strong className="ml-1">Home</strong>
         </NavLink>
       </div>
       <div className="nav-item">
         <NavLink className="nav-link align-items-center d-flex" exact to="/answers">
-          <Fa kind={'edit'} size="2x" color="#7b7b7d" />
+          <Fa type="r" kind={'edit'} size="lg" color="#7b7b7d" />
           <strong className="ml-1">Answer</strong>
         </NavLink>
       </div>
       <div className="nav-item">
         <NavLink className="nav-link align-items-center d-flex" exact to="/spaces">
-          <Fa kind={'users'} size="2x" color="#7b7b7d" />
+          <Fa kind={'users'} size="lg" color="#7b7b7d" />
           <strong className="ml-1">Spaces</strong>
         </NavLink>
       </div>
       <div className="nav-item">
         <NavLink className="nav-link align-items-center d-flex" exact to="/notifications">
-          <Fa kind={'bell'} size="2x" color="#7b7b7d" />
+          <Fa type="r" kind={'bell'} size="lg" color="#7b7b7d" />
           <strong className="ml-1">Notifications</strong>
         </NavLink>
       </div>
