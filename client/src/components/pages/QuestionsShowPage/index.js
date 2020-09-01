@@ -6,7 +6,7 @@ import QuestionDetails from './QuestionDetails';
 import AnswerList from './AnswerList';
 import { Question } from '../../../requests/question';
 import Loading from '../../common/Loading';
-import './index.css';
+import './index.scss';
 
 class QuestionsShowPage extends Component {
   constructor(props) {
@@ -31,10 +31,15 @@ class QuestionsShowPage extends Component {
       return <h1>Question doesn't exist!</h1>;
     }
     return (
-      <main className="QuestionsShowPage">
-        <QuestionDetails {...question} />
-        <h2 style={{ marginTop: '3em' }}>Answers</h2>
-        <AnswerList answers={question.answers} />
+      <main className="QuestionsShowPage ml-5 mr-5 row">
+        <div className="col-7 mt-4">
+          <QuestionDetails {...question} />
+          <AnswerList answers={question.answers} />
+        </div>
+        <div className="col-5 mt-4">
+          <h5 className="mb-0">Related Questions</h5>
+          <hr />
+        </div>
       </main>
     );
   }
