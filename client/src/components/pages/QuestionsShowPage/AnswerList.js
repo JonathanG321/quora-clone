@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnswerDetails from './AnswerDetails';
+import ReplyList from './ReplyList';
 
 function AnswerList(props) {
   const { answers } = props;
   return (
     <div className="AnswerList">
-      <ul>
+      <ul className="answers">
         {answers.map((answer) => (
-          <li key={answer.id}>
+          <li className="answer" key={answer.id}>
             <AnswerDetails user={answer.user} createdAt={answer.createdAt} body={answer.body} />
+            <ReplyList replies={answer.replies} />
+            <hr />
           </li>
         ))}
       </ul>
