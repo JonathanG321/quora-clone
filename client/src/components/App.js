@@ -42,20 +42,22 @@ class App extends Component {
       <div className="App">
         <Router>
           <NavBar onSignOut={this.signOut} user={user} />
-          <Switch>
-            <Route exact path="/">
-              <HomePage />
-            </Route>
-            <Route exact path="/sign-in">
-              <SignInPage onSignIn={this.signIn} />
-            </Route>
-            <Route path="/questions/:id">
-              <QuestionsShowPage />
-            </Route>
-            <Route path="*">
-              <NotFoundPage />
-            </Route>
-          </Switch>
+          <div className="container-fluid">
+            <Switch>
+              <Route exact path="/">
+                <HomePage />
+              </Route>
+              <Route exact path="/sign-in">
+                <SignInPage onSignIn={this.signIn} />
+              </Route>
+              <Route path="/questions/:id">
+                <QuestionsShowPage />
+              </Route>
+              <Route path="*">
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </div>
         </Router>
       </div>
     );
