@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Fa from '../../common/Fa';
 
 function AnswerDetails(props) {
   const { user, createdAt, body } = props;
   return (
     <div className="AnswerDetails">
       <p>
-        Answer by: {user.firstName} {user.lastName}
+        {user.firstName} {user.lastName}
       </p>
       <p>{new Date(createdAt).toLocaleDateString()}</p>
       {body && <p>{body}</p>}
+      <div className="d-flex">
+        <div className="dislike-button d-flex justify-content-center align-items-center">
+          <Fa type="r" size="lg" kind="arrow-alt-circle-up" color="blue" />
+        </div>
+        <div className="dislike-button d-flex justify-content-center align-items-center">
+          <Fa type="r" size="lg" kind="arrow-alt-circle-down" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -23,8 +32,6 @@ AnswerDetails.propTypes = {
   }).isRequired,
   createdAt: PropTypes.string.isRequired,
   body: PropTypes.string,
-  isRed: PropTypes.bool,
-  onDeleteClick: PropTypes.func,
 };
 
 AnswerDetails.defaultProps = {
