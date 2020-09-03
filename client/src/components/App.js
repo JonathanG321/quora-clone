@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NavBar from './NavBar';
-import { HomePage, NotFoundPage, SignInPage, QuestionsShowPage } from './pages';
+import { HomePage, NotFoundPage, SignInPage, QuestionsShowPage, TagsShowPage } from './pages';
 // import AuthRoute from './common/AuthRoute';
 import Loading from '../components/common/Loading';
 import { User } from '../requests/user';
@@ -52,6 +52,9 @@ class App extends Component {
               </Route>
               <Route path="/questions/:id">
                 <QuestionsShowPage />
+              </Route>
+              <Route path="/tags/:id">
+                <TagsShowPage />
               </Route>
               <Route path="*">
                 <NotFoundPage />
