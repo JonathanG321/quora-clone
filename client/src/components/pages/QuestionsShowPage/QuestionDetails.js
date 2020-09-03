@@ -7,9 +7,9 @@ function QuestionDetails(props) {
   return (
     <div className="QuestionDetails">
       {tags.map((tag) => (
-        <span key={tag.id} className="tag mr-2">
+        <a href={`/tags/${tag.id}`} key={tag.id} className="tag mr-2">
           {tag.name}
-        </span>
+        </a>
       ))}
       <h3>
         <strong>{title}</strong>

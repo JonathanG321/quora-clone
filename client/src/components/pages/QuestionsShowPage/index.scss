@@ -37,12 +37,20 @@
   cursor: pointer;
 }
 
-.tag {
+a.tag:link {
+  text-decoration: none;
+  color: black;
   background-color: rgba(0, 0, 0, 0.08);
   border-radius: 3px;
   padding: 4px;
 }
-.tag:hover {
+a.tag:visited {
+  color: black;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  padding: 4px;
+}
+a.tag:hover {
   color: rgb(46, 105, 255);
   cursor: pointer;
 }
