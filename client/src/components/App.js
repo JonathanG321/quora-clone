@@ -5,6 +5,7 @@ import { HomePage, NotFoundPage, SignInPage, QuestionsShowPage, TagsShowPage } f
 // import AuthRoute from './common/AuthRoute';
 import Loading from '../components/common/Loading';
 import { User } from '../requests/user';
+import './styles.scss';
 
 const initialState = { user: null };
 
@@ -42,7 +43,7 @@ class App extends Component {
       <div className="App">
         <Router>
           <NavBar onSignOut={this.signOut} user={user} />
-          <div className="container-fluid">
+          <div className="container-fluid pr-0 pl-0 max-height max-width">
             <Switch>
               <Route exact path="/">
                 <HomePage />
