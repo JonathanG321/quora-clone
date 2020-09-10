@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { withRouterPropTypes } from '../../PropTypes/withRouterPropTypes';
 import { Session } from '../../requests/session';
 import Fa from '../common/Fa';
+import Logo from '../common/Logo';
 import './styles.scss';
 
 function NavBar(props) {
@@ -18,63 +19,93 @@ function NavBar(props) {
     });
   }
   return (
-    <nav className="nav navbar navbar-light bg-light flex justify-content-center navbar-shadow">
-      <div className="navbar-brand">
-        <strong>Quora</strong>
-      </div>
-      <div className="nav-item">
-        <NavLink className="nav-link align-items-center d-flex" exact to="/">
-          <Fa kind={'home'} size="lg" color="#7b7b7d" />
-          <strong className="ml-1">Home</strong>
-        </NavLink>
-      </div>
-      <div className="nav-item">
-        <NavLink className="nav-link align-items-center d-flex" exact to="/answers">
-          <Fa type="r" kind={'edit'} size="lg" color="#7b7b7d" />
-          <strong className="ml-1">Answer</strong>
-        </NavLink>
-      </div>
-      <div className="nav-item">
-        <NavLink className="nav-link align-items-center d-flex" exact to="/spaces">
-          <Fa kind={'users'} size="lg" color="#7b7b7d" />
-          <strong className="ml-1">Spaces</strong>
-        </NavLink>
-      </div>
-      <div className="nav-item">
-        <NavLink className="nav-link align-items-center d-flex" exact to="/notifications">
-          <Fa type="r" kind={'bell'} size="lg" color="#7b7b7d" />
-          <strong className="ml-1">Notifications</strong>
-        </NavLink>
-      </div>
-      {!isSignedIn && (
-        <>
+    <div>
+      <nav className="red d-flex justify-content-center d-md-none">
+        <div className="navbar-brand">
+          <Logo color="logo-fill-white" />
+        </div>
+      </nav>
+      <nav className="nav navbar navbar-light bg-light navbar-shadow">
+        <div className="container-fluid justify-content-between d-flex">
+          <div className="navbar-brand d-none d-md-block">
+            <Logo />
+          </div>
           <div className="nav-item">
-            <NavLink className="nav-link" exact to="/sign-in">
-              <strong>Sign In</strong>
+            <NavLink
+              className="nav-link align-items-center d-flex justify-content-center"
+              exact
+              to="/"
+            >
+              <Fa kind={'home'} size="lg" />
+              <strong className="ml-1 d-none d-md-block">Home</strong>
             </NavLink>
           </div>
           <div className="nav-item">
-            <NavLink className="nav-link" exact to="/sign-up">
-              <strong>Sign Up</strong>
+            <NavLink
+              className="nav-link align-items-center d-flex justify-content-center"
+              exact
+              to="/answers"
+            >
+              <Fa type="r" kind={'edit'} size="lg" />
+              <strong className="ml-1 d-none d-md-block">Answer</strong>
             </NavLink>
           </div>
-        </>
-      )}
-      {isSignedIn && (
-        <>
           <div className="nav-item">
-            <div className="nav-link">
-              <strong>{user.firstName}</strong>
+            <NavLink
+              className="nav-link align-items-center d-flex justify-content-center"
+              exact
+              to="/spaces"
+            >
+              <Fa kind={'users'} size="lg" />
+              <strong className="ml-1 d-none d-md-block">Spaces</strong>
+            </NavLink>
+          </div>
+          <div className="nav-item">
+            <NavLink
+              className="nav-link align-items-center d-flex justify-content-center"
+              exact
+              to="/notifications"
+            >
+              <Fa type="r" kind={'bell'} size="lg" />
+              <strong className="ml-1 d-none d-md-block">Notifications</strong>
+            </NavLink>
+          </div>
+          {!isSignedIn && (
+            <>
+              <div className="nav-item">
+                <NavLink
+                  className="nav-link align-items-center d-flex justify-content-center"
+                  exact
+                  to="/sign-in"
+                >
+                  <strong>Sign In</strong>
+                </NavLink>
+              </div>
+              <div className="nav-item">
+                <NavLink
+                  className="nav-link align-items-center d-flex justify-content-center"
+                  exact
+                  to="/sign-up"
+                >
+                  <strong>Sign Up</strong>
+                </NavLink>
+              </div>
+            </>
+          )}
+          {isSignedIn && (
+            <div className="nav-item">
+              <a
+                className="nav-link align-items-center d-flex justify-content-center"
+                href="/sign-out"
+                onClick={handleSignOut}
+              >
+                <strong>Sign Out</strong>
+              </a>
             </div>
-          </div>
-          <div className="nav-item">
-            <a className="nav-link" href="/sign-out" onClick={handleSignOut}>
-              <strong>Sign Out</strong>
-            </a>
-          </div>
-        </>
-      )}
-    </nav>
+          )}
+        </div>
+      </nav>
+    </div>
   );
 }
 
