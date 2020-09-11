@@ -1,0 +1,14 @@
+.reply-card {
+  border-top: thin solid #dfdfdf;
+  background-color: white;
+}
+.reply-card:last-child {
+  border-top: thin solid #dfdfdf;
+  background-color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.date {
+  color: #939395;
+}
