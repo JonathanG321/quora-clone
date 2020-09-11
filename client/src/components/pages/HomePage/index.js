@@ -6,6 +6,7 @@ import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
 import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
 import QuestionCard from '../../common/QuestionCard';
+import { Reply } from '../../../requests/reply';
 import './styles.scss';
 
 class HomePage extends Component {
@@ -17,47 +18,29 @@ class HomePage extends Component {
       follows: [],
       questions: [],
     };
+    this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
   }
-  componentDidMount() {
+  async setCurrentUser() {
     User.getCurrentUser().then((user) => {
-      if (!user) {
+      if (!user.id) {
         this.setState({ isLoading: false });
       } else {
-        const follows = user.topics
-          .map((topic) => {
-            topic.type = 'topics';
-            return topic;
-          })
-          .concat(
-            user.spaces.map((space) => {
-              space.type = 'spaces';
-              return space;
-            }),
-          );
-        const questions = user.topics
-          .map((topic) => {
-            return topic.spaces.map((space) => {
-              return space.questions.map((question) => {
-                return question;
-              });
-            });
-          })
-          .concat(
-            user.spaces.map((space) => {
-              return space.questions.map((question) => {
-                return question;
-              });
-            }),
-          )
-          .flat()
-          .sort((a, b) => {
-            const dateA = new Date(a.createdAt);
-            const dateB = new Date(b.createdAt);
-            return dateA - dateB;
-          });
+        const follows = getFollows(user);
+        const questions = getQuestions(user);
         this.setState({ user, isLoading: false, follows, questions });
       }
     });
+  }
+  componentDidMount() {
+    this.setCurrentUser();
+  }
+  async onSubmitReplyForm(newReply, answerId, questionId) {
+    const reply = await Reply.create(newReply, answerId, questionId);
+    this.addReplyToState(reply, answerId, questionId);
+  }
+  addReplyToState(reply, answerId, questionId) {
+    // TODO: add new reply to correct location in state as defined by answerId and questionId
+    this.state.questions;
   }
   render() {
     const { user, isLoading, follows, questions } = this.state;
@@ -73,12 +56,54 @@ class HomePage extends Component {
           {questions
             .filter((question) => question.answers && question.answers.length)
             .map((question) => (
-              <QuestionCard key={question.id} question={question} />
+              <QuestionCard
+                onSubmitReplyForm={this.onSubmitReplyForm}
+                key={question.id}
+                question={question}
+              />
             ))}
         </div>
       </main>
     );
   }
+}
+
+function getFollows(user) {
+  return user.topics
+    .map((topic) => {
+      topic.type = 'topics';
+      return topic;
+    })
+    .concat(
+      user.spaces.map((space) => {
+        space.type = 'spaces';
+        return space;
+      }),
+    );
+}
+
+function getQuestions(user) {
+  return user.topics
+    .map((topic) => {
+      return topic.spaces.map((space) => {
+        return space.questions.map((question) => {
+          return question;
+        });
+      });
+    })
+    .concat(
+      user.spaces.map((space) => {
+        return space.questions.map((question) => {
+          return question;
+        });
+      }),
+    )
+    .flat()
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateA - dateB;
+    });
 }
 
 HomePage.propTypes = {
