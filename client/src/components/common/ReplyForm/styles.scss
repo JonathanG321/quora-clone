@@ -1,0 +1,16 @@
+.reply-card:not(:first-child) {
+  border-top: thin solid #dfdfdf;
+}
+.reply-card {
+  background-color: white;
+}
+.date {
+  color: #939395;
+}
+.reply-form {
+  border-top: thin solid #dfdfdf;
+}
+div.card-header:first-child {
+  border-radius: 0px;
+  border-bottom: none;
+}
