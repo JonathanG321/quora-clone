@@ -2,34 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Fa from '../Fa';
+import Replies from '../Replies';
 import './styles.scss';
 
 function QuestionCard(props) {
-  const { question } = props;
+  const { question, onSubmitReplyForm } = props;
   const answers = question.answers
     .concat([])
     .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
   return (
-    <div className="card mb-2">
-      <div className="card-body">
-        <div>
-          {answers[0].user.firstName} {answers[0].user.lastName}
-        </div>
-        <Link className="question-link" to={`/questions/question.id`}>
-          <strong>{question.title}</strong>
-        </Link>
-        <div>{answers[0].body}</div>
-        <div className="d-flex align-items-center">
-          <div className="dislike-button d-flex justify-content-center align-items-center">
-            <Fa type="r" size="lg" kind="arrow-alt-circle-up" color="blue" />
+    <>
+      <div className="card mb-2">
+        <div className="card-body">
+          <div>
+            {answers[0].user.firstName} {answers[0].user.lastName}
           </div>
-          <div className="dislike-button d-flex justify-content-center align-items-center">
-            <Fa type="r" size="lg" kind="arrow-alt-circle-down" />
+          <Link className="question-link" to={`/questions/${question.id}`}>
+            <strong>{question.title}</strong>
+          </Link>
+          <div>{answers[0].body}</div>
+          <div className="d-flex align-items-center">
+            <div className="dislike-button d-flex justify-content-center align-items-center">
+              <Fa type="r" size="lg" kind="arrow-alt-circle-up" color="blue" />
+            </div>
+            <div className="dislike-button d-flex justify-content-center align-items-center">
+              <Fa type="r" size="lg" kind="arrow-alt-circle-down" />
+            </div>
+            <div className="ml-1">{calcVoteCount(answers[0].votes)}</div>
           </div>
-          <div className="ml-1">{calcVoteCount(answers[0].votes)}</div>
         </div>
+        <Replies
+          replies={answers[0].replies}
+          onSubmitReplyForm={onSubmitReplyForm}
+          answerId={answers[0].id}
+          questionId={question.id}
+        />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -58,10 +67,12 @@ QuestionCard.propTypes = {
       }),
     ).isRequired,
   }),
+  onSubmitReplyForm: PropTypes.func.isRequired,
 };
 
 QuestionCard.defaultProps = {
   question: {},
+  onSubmitReplyForm: () => {},
 };
 
 export default QuestionCard;
