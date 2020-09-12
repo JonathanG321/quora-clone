@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const User = require('../../../models/user.model');
 const Answer = require('../../../models/answer.model');
+const Reply = require('../../../models/reply.model');
 
 const AnswersController = {
   async create(request, response, next) {
@@ -30,6 +31,21 @@ const AnswersController = {
       const { id } = request.params;
       Answer.destroy({ where: { id } }).then(() => {
         response.json({ status: 200, ok: true });
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getReplies(request, response, next) {
+    try {
+      const { id, limit, offset } = request.params;
+      Answer.findOne({ where: { id }, include: { model: Reply } }).then((answer) => {
+        const replies = answer.replies;
+        let finalReplies = [];
+        for (let i = 0 + offset; i < limit + offset; i++) {
+          finalReplies.push(replies[i]);
+        }
+        response.status(201).json(finalReplies);
       });
     } catch (e) {
       next(e);
