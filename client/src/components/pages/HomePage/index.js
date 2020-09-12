@@ -39,8 +39,17 @@ class HomePage extends Component {
     this.addReplyToState(reply, answerId, questionId);
   }
   addReplyToState(reply, answerId, questionId) {
-    // TODO: add new reply to correct location in state as defined by answerId and questionId
-    this.state.questions;
+    const questions = this.state.questions;
+    questions.forEach((question) => {
+      if (question.id == questionId) {
+        question.answers.forEach((answer) => {
+          if (answer.id == answerId) {
+            answer.replies.push(reply);
+          }
+        });
+      }
+    });
+    this.setState(questions);
   }
   render() {
     const { user, isLoading, follows, questions } = this.state;
