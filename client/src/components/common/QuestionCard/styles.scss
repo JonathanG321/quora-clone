@@ -9,3 +9,16 @@
 .card-body {
   padding-bottom: 5px;
 }
+
+.comments-button {
+  background-color: white;
+  border: none;
+}
+.comments-button:focus {
+  outline: none;
+}
+
+.collapsible {
+  display: none;
+  overflow: hidden;
+}
