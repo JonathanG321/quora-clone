@@ -1,17 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Fa from '../Fa';
 import Replies from '../Replies';
+import { Reply } from '../../../requests/reply';
+import Loading from '../Loading';
 import './styles.scss';
 
-function QuestionCard(props) {
-  const { question, onSubmitReplyForm } = props;
-  const answers = question.answers
-    .concat([])
-    .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
-  return (
-    <>
+class QuestionCard extends Component {
+  constructor(props) {
+    super(props);
+    const { question } = props;
+    this.state = {
+      isLoading: true,
+      question,
+    };
+    this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
+  }
+  componentDidMount() {
+    this.setState({ isLoading: false });
+  }
+  async onSubmitReplyForm(newReply, answerId, questionId) {
+    const reply = await Reply.create(newReply, answerId, questionId);
+    this.addReplyToState(reply, answerId, questionId);
+  }
+  addReplyToState(reply, answerId, questionId) {
+    const question = this.state.question;
+    if (question.id == questionId) {
+      question.answers.forEach((answer) => {
+        if (answer.id == answerId) {
+          answer.replies.push(reply);
+        }
+      });
+    }
+    this.setState(question);
+  }
+  render() {
+    const { question, isLoading } = this.state;
+    const answers = question.answers
+      .concat([])
+      .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
+    if (isLoading) {
+      return <Loading />;
+    }
+    return (
       <div className="card mb-2">
         <div className="card-body">
           <div>
@@ -29,17 +61,25 @@ function QuestionCard(props) {
               <Fa type="r" size="lg" kind="arrow-alt-circle-down" />
             </div>
             <div className="ml-1">{calcVoteCount(answers[0].votes)}</div>
+            <button
+              className="collapse-button dislike-button comments-button d-flex align-items-center ml-2 justify-content-center"
+              type="button"
+            >
+              <Fa kind="comment" type="r" />
+            </button>
           </div>
         </div>
-        <Replies
-          replies={answers[0].replies}
-          onSubmitReplyForm={onSubmitReplyForm}
-          answerId={answers[0].id}
-          questionId={question.id}
-        />
+        <div className="" id="comments">
+          <Replies
+            replies={answers[0].replies}
+            onSubmitReplyForm={this.onSubmitReplyForm}
+            answerId={answers[0].id}
+            questionId={question.id}
+          />
+        </div>
       </div>
-    </>
-  );
+    );
+  }
 }
 
 function calcVoteCount(votes) {
