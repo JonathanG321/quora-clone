@@ -14,6 +14,8 @@ class QuestionCard extends Component {
     this.state = {
       isLoading: true,
       question,
+      limit: 3,
+      offset: 0,
     };
     this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
   }
@@ -22,18 +24,16 @@ class QuestionCard extends Component {
   }
   async onSubmitReplyForm(newReply, answerId, questionId) {
     const reply = await Reply.create(newReply, answerId, questionId);
-    this.addReplyToState(reply, answerId, questionId);
+    this.addReplyToState(reply, answerId);
   }
-  addReplyToState(reply, answerId, questionId) {
+  addReplyToState(reply, answerId) {
     const question = this.state.question;
-    if (question.id == questionId) {
-      question.answers.forEach((answer) => {
-        if (answer.id == answerId) {
-          answer.replies.push(reply);
-        }
-      });
-    }
-    this.setState(question);
+    question.answers.forEach((answer) => {
+      if (answer.id == answerId) {
+        answer.replies.unshift(reply);
+      }
+    });
+    this.setState({ question, offset: this.state.offset + 1 });
   }
   render() {
     const { question, isLoading } = this.state;
