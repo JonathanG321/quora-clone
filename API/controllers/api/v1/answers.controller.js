@@ -39,13 +39,12 @@ const AnswersController = {
   async getReplies(request, response, next) {
     try {
       const { id, limit, offset } = request.params;
-      Answer.findOne({ where: { id }, include: { model: Reply } }).then((answer) => {
+      Answer.findOne({
+        where: { id },
+        include: { model: Reply, limit, offset, order: [['createdAt', 'DESC']] },
+      }).then((answer) => {
         const replies = answer.replies;
-        let finalReplies = [];
-        for (let i = 0 + offset; i < limit + offset; i++) {
-          finalReplies.push(replies[i]);
-        }
-        response.status(201).json(finalReplies);
+        response.status(201).json(replies);
       });
     } catch (e) {
       next(e);
