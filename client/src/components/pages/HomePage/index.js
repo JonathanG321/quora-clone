@@ -6,7 +6,6 @@ import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
 import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
 import QuestionCard from '../../common/QuestionCard';
-import { Reply } from '../../../requests/reply';
 import './styles.scss';
 
 class HomePage extends Component {
@@ -18,7 +17,6 @@ class HomePage extends Component {
       follows: [],
       questions: [],
     };
-    this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
   }
   async setCurrentUser() {
     User.getCurrentUser().then((user) => {
@@ -34,23 +32,6 @@ class HomePage extends Component {
   componentDidMount() {
     this.setCurrentUser();
   }
-  async onSubmitReplyForm(newReply, answerId, questionId) {
-    const reply = await Reply.create(newReply, answerId, questionId);
-    this.addReplyToState(reply, answerId, questionId);
-  }
-  addReplyToState(reply, answerId, questionId) {
-    const questions = this.state.questions;
-    questions.forEach((question) => {
-      if (question.id == questionId) {
-        question.answers.forEach((answer) => {
-          if (answer.id == answerId) {
-            answer.replies.push(reply);
-          }
-        });
-      }
-    });
-    this.setState(questions);
-  }
   render() {
     const { user, isLoading, follows, questions } = this.state;
     if (isLoading) {
@@ -65,11 +46,7 @@ class HomePage extends Component {
           {questions
             .filter((question) => question.answers && question.answers.length)
             .map((question) => (
-              <QuestionCard
-                onSubmitReplyForm={this.onSubmitReplyForm}
-                key={question.id}
-                question={question}
-              />
+              <QuestionCard key={question.id} question={question} />
             ))}
         </div>
       </main>
