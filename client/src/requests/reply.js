@@ -9,4 +9,12 @@ export const Reply = {
       body: JSON.stringify(newReply),
     }).then((res) => res.json());
   },
+  get(answerId, questionId, limit, offset) {
+    return fetch(`${API_URL}/questions/${questionId}/answers/${answerId}/replies`, {
+      method: 'GET',
+      headers: jsonHeaders,
+      credentials: 'include',
+      body: JSON.stringify(newReply),
+    }).then((res) => res.json());
+  },
 };
