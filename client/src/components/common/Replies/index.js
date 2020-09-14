@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReplyForm from '../ReplyForm';
+import ReplyForm from './ReplyForm';
 import { Link } from 'react-router-dom';
 import './styles.scss';
+import LoadMoreRepliesButton from './LoadMoreRepliesButton';
 
 function Replies(props) {
-  const { replies, onSubmitReplyForm, answerId, questionId } = props;
+  const { replies, onSubmitReplyForm, answerId, questionId, onClickLoadReplies } = props;
   return (
     <div>
       <ReplyForm onSubmit={onSubmitReplyForm} answerId={answerId} questionId={questionId} />
@@ -26,6 +27,7 @@ function Replies(props) {
           </div>
         );
       })}
+      <LoadMoreRepliesButton onClick={onClickLoadReplies} />
     </div>
   );
 }
@@ -41,12 +43,14 @@ Replies.propTypes = {
     }),
   ),
   onSubmitReplyForm: PropTypes.func.isRequired,
+  onClickLoadReplies: PropTypes.func.isRequired,
   answerId: PropTypes.number.isRequired,
 };
 
 Replies.defaultProps = {
   replies: [],
   onSubmitReplyForm: () => {},
+  onClickLoadReplies: () => {},
 };
 
 export default Replies;
