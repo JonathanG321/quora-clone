@@ -71,11 +71,7 @@ module.exports = {
                   {
                     model: Answer,
                     required: false,
-                    include: [
-                      { model: Vote, required: false },
-                      { model: Reply, required: false, include: { model: User } },
-                      { model: User },
-                    ],
+                    include: [{ model: Vote, required: false }, { model: User }],
                   },
                 ],
               },
@@ -94,7 +90,6 @@ module.exports = {
                   required: false,
                   include: [
                     { model: Vote, required: false },
-                    { model: Reply, required: false, include: { model: User } },
                     { model: User, required: false },
                   ],
                 },
