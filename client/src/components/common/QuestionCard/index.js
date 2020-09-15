@@ -16,9 +16,11 @@ class QuestionCard extends Component {
       question,
       limit: 3,
       offset: 0,
+      showReplies: false,
     };
     this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
     this.onClickLoadReplies = this.onClickLoadReplies.bind(this);
+    this.toggleReplies = this.toggleReplies.bind(this);
   }
   componentDidMount() {
     this.setState({ isLoading: false });
@@ -27,32 +29,46 @@ class QuestionCard extends Component {
     const reply = await Reply.create(newReply, answerId, questionId);
     this.addReplyToState(reply, answerId);
   }
-  async onClickLoadReplies(limit, offset) {
+  async onClickLoadReplies(limit, offset, answerId, questionId) {
     const replies = await Reply.get(answerId, questionId, limit, offset);
     this.addRepliesToState(replies, answerId, limit);
   }
   addRepliesToState(replies, answerId, limit) {
-    const question = this.state.question;
-    question.answers.forEach((answer) => {
-      if (answer.id == answerId) {
-        replies.forEach((reply) => {
-          answer.replies.push(reply);
-        });
-      }
-    });
-    this.setState({ question, offset: this.state.offset + limit });
+    this.setState((state) => ({
+      question: {
+        ...state.question,
+        answers: state.question.answers.map((answer) => {
+          if (answer.id !== answerId) {
+            return answer;
+          }
+          return { ...answer, replies: answer.replies.concat(replies) };
+        }),
+      },
+      offset: state.offset + limit,
+    }));
+  }
+  toggleReplies() {
+    this.setState((state) => ({
+      offset: 0,
+      showReplies: !state.showReplies,
+    }));
   }
   addReplyToState(reply, answerId) {
-    const question = this.state.question;
-    question.answers.forEach((answer) => {
-      if (answer.id == answerId) {
-        answer.replies.unshift(reply);
-      }
-    });
-    this.setState({ question, offset: this.state.offset + 1 });
+    this.setState((state) => ({
+      question: {
+        ...state.question,
+        answers: state.question.answers.map((answer) => {
+          if (answer.id !== answerId) {
+            return answer;
+          }
+          return { ...answer, replies: [reply].concat(answer.replies) };
+        }),
+      },
+      offset: state.offset + 1,
+    }));
   }
   render() {
-    const { question, isLoading } = this.state;
+    const { question, isLoading, limit, offset, showReplies } = this.state;
     const answers = question.answers
       .concat([])
       .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
@@ -78,6 +94,7 @@ class QuestionCard extends Component {
             </div>
             <div className="ml-1">{calcVoteCount(answers[0].votes)}</div>
             <button
+              onClick={this.toggleReplies}
               className="collapse-button dislike-button comments-button d-flex align-items-center ml-2 justify-content-center"
               type="button"
             >
@@ -85,15 +102,21 @@ class QuestionCard extends Component {
             </button>
           </div>
         </div>
-        <div className="" id="comments">
-          <Replies
-            replies={answers[0].replies}
-            onSubmitReplyForm={this.onSubmitReplyForm}
-            answerId={answers[0].id}
-            questionId={question.id}
-            onClickLoadReplies={() => this.onClickLoadReplies(limit, offset)}
-          />
-        </div>
+        {showReplies && (
+          <div className="" id="comments">
+            <Replies
+              replies={answers[0].replies}
+              onSubmitReplyForm={this.onSubmitReplyForm}
+              answerId={answers[0].id}
+              questionId={question.id}
+              limit={limit}
+              offset={offset}
+              onClickLoadReplies={() =>
+                this.onClickLoadReplies(limit, offset, answers[0].id, question.id)
+              }
+            />
+          </div>
+        )}
       </div>
     );
   }
