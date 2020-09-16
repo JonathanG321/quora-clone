@@ -13,6 +13,7 @@ class Replies extends Component {
       replies: [],
       limit: 3,
       offset: 0,
+      showLoadReplies: true,
     };
     this.onSubmitReplyForm = this.onSubmitReplyForm.bind(this);
     this.onClickLoadReplies = this.onClickLoadReplies.bind(this);
@@ -36,6 +37,7 @@ class Replies extends Component {
     this.setState((state) => ({
       replies: state.replies.concat(replies),
       offset: state.offset + limit,
+      showLoadReplies: replies.length === limit,
     }));
   }
   addReplyToState(reply) {
@@ -45,7 +47,7 @@ class Replies extends Component {
     }));
   }
   render() {
-    const { replies = [] } = this.state;
+    const { replies = [], showLoadReplies } = this.state;
     console.log(replies);
     return (
       <div>
@@ -67,7 +69,7 @@ class Replies extends Component {
             </div>
           );
         })}
-        <LoadMoreRepliesButton onClick={this.onClickLoadReplies} />
+        {showLoadReplies && <LoadMoreRepliesButton onClick={this.onClickLoadReplies} />}
       </div>
     );
   }
