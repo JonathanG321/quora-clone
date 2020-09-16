@@ -36,20 +36,6 @@ const AnswersController = {
       next(e);
     }
   },
-  async getReplies(request, response, next) {
-    try {
-      const { id } = request.params;
-      const { limit, offset } = request.query;
-      const answer = await Answer.findOne({
-        where: { id },
-        include: { model: Reply, limit, offset, order: [['createdAt', 'DESC']] },
-      });
-      const replies = answer.replies;
-      response.json(replies);
-    } catch (e) {
-      next(e);
-    }
-  },
 };
 
 module.exports = AnswersController;
