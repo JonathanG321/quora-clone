@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './styles.scss';
 
 function ReplyForm(props) {
-  const { onSubmit, answerId, questionId } = props;
+  const { onSubmit } = props;
   function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -12,7 +12,7 @@ function ReplyForm(props) {
       body: formData.get('body'),
     };
     event.currentTarget.reset();
-    onSubmit(newReply, answerId, questionId);
+    onSubmit(newReply);
   }
   return (
     <div className="reply-form card-header">
@@ -30,11 +30,6 @@ function ReplyForm(props) {
 
 ReplyForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  answerId: PropTypes.number.isRequired,
-};
-
-ReplyForm.defaultProps = {
-  onSubmit: () => {},
 };
 
 export default ReplyForm;
