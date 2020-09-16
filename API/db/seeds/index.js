@@ -87,7 +87,7 @@ async function seed() {
   await Reply.bulkCreate(
     answers
       .map((answer) =>
-        Array.from({ length: randomBetween(0, 5) }).map(() => ({
+        Array.from({ length: randomBetween(0, 30) }).map(() => ({
           body: faker.lorem.paragraph(),
           answerId: answer.id,
           userId: pickRandom(users).id,
@@ -119,8 +119,8 @@ async function seed() {
   const tags = await Tag.findAll();
 
   await Vote.bulkCreate(
-    Array.from({ length: randomBetween(200, 250) }).map(() => ({
-      isUpVote: faker.random.boolean(),
+    Array.from({ length: randomBetween(1000, 1250) }).map(() => ({
+      isUpVote: Math.random() > 0.25,
       userId: pickRandom(users).id,
       answerId: pickRandom(answers).id,
     })),
