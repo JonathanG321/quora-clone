@@ -1,8 +1,17 @@
 .load-more-button {
-  background-color: white;
-  color: blue;
-  border: none;
+  background-color: #f7f7f8;
+  border: thin solid rgba(99, 100, 102, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 10px 20px;
+  width: 100%;
+  color: rgb(99, 100, 102);
 }
 .load-more-button:focus {
   outline: none;
+}
+.load-more-button:hover {
+  background-color: rgb(236, 236, 238);
+  border-radius: 20px;
+  cursor: pointer;
 }

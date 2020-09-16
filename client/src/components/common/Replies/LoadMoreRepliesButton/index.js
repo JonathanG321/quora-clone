@@ -5,8 +5,10 @@ import './styles.scss';
 function LoadMoreRepliesButton(props) {
   const { onClick } = props;
   return (
-    <div className="load-more-button d-flex justify-content-center align-items-center">
-      <button onClick={onClick}>Load More Replies</button>
+    <div className="d-flex justify-content-center align-items-center">
+      <button className="load-more-button" onClick={onClick}>
+        Load More Replies
+      </button>
     </div>
   );
 }
