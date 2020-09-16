@@ -16,8 +16,6 @@ router.use('/:answerId/votes', votesRouter);
 
 router.use(Authentication.authenticate);
 
-router.get('/:id', ApiV1AnswersController.getReplies);
-
 router.post(
   '/',
   Authorization.authorizeCurrentUser('create', () => new Answer()),
