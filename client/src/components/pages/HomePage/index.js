@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Loading from '../../common/Loading';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
 import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
 import QuestionCard from '../../common/QuestionCard';
+import { Feed } from '../../../requests/feed';
 import './styles.scss';
 
 class HomePage extends Component {
@@ -14,33 +14,35 @@ class HomePage extends Component {
     this.state = {
       isLoading: true,
       user: null,
-      follows: [],
       questions: [],
     };
   }
   async setCurrentUser() {
-    User.getCurrentUser().then((user) => {
+    await User.getCurrentUser().then(async (user) => {
       if (!user.id) {
         this.setState({ isLoading: false });
       } else {
-        const follows = getFollows(user);
-        const questions = getQuestions(user);
-        this.setState({ user, isLoading: false, follows, questions });
+        this.setState({ user, isLoading: false });
+        this.getFeed();
       }
     });
+  }
+  async getFeed() {
+    const questions = await Feed.getFeed();
+    this.setState({ questions });
   }
   componentDidMount() {
     this.setCurrentUser();
   }
   render() {
-    const { user, isLoading, follows, questions } = this.state;
+    const { isLoading, questions } = this.state;
     if (isLoading) {
       return <Loading />;
     }
     return (
       <main className="d-flex home-page">
         <div className="topics col d-none d-md-block col-3">
-          <FollowsDisplay follows={follows} />
+          <FollowsDisplay />
         </div>
         <div className="feed col col-md-9">
           {questions
@@ -52,44 +54,6 @@ class HomePage extends Component {
       </main>
     );
   }
-}
-
-function getFollows(user) {
-  return user.topics
-    .map((topic) => {
-      topic.type = 'topics';
-      return topic;
-    })
-    .concat(
-      user.spaces.map((space) => {
-        space.type = 'spaces';
-        return space;
-      }),
-    );
-}
-
-function getQuestions(user) {
-  return user.topics
-    .map((topic) => {
-      return topic.spaces.map((space) => {
-        return space.questions.map((question) => {
-          return question;
-        });
-      });
-    })
-    .concat(
-      user.spaces.map((space) => {
-        return space.questions.map((question) => {
-          return question;
-        });
-      }),
-    )
-    .flat()
-    .sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return dateA - dateB;
-    });
 }
 
 HomePage.propTypes = {
