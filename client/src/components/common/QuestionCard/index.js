@@ -5,6 +5,7 @@ import Fa from '../Fa';
 import Replies from '../Replies';
 import Loading from '../Loading';
 import './styles.scss';
+import { Question } from '../../../requests/question';
 
 class QuestionCard extends Component {
   constructor(props) {
@@ -17,8 +18,10 @@ class QuestionCard extends Component {
     };
     this.toggleReplies = this.toggleReplies.bind(this);
   }
-  componentDidMount() {
-    this.setState({ isLoading: false });
+  async componentDidMount() {
+    const { question } = this.state;
+    const fullQuestion = await Question.oneCard(question.id);
+    this.setState({ isLoading: false, question: fullQuestion });
   }
   toggleReplies() {
     this.setState((state) => ({
@@ -27,12 +30,12 @@ class QuestionCard extends Component {
   }
   render() {
     const { question, isLoading, showReplies } = this.state;
-    const answers = question.answers
-      .concat([])
-      .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
     if (isLoading) {
       return <Loading />;
     }
+    const answers = question.answers
+      .concat([])
+      .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
     return (
       <div className="card mb-2">
         <div className="card-body">
