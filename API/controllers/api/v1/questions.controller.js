@@ -1,9 +1,10 @@
-const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const Question = require('../../../models/question.model');
 const User = require('../../../models/user.model');
 const Answer = require('../../../models/answer.model');
 const Reply = require('../../../models/reply.model');
 const Tag = require('../../../models/tag.model');
+const Vote = require('../../../models/vote.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 const QuestionsController = {
@@ -17,6 +18,28 @@ const QuestionsController = {
           {
             model: Answer,
             include: [{ model: User }, { model: Reply, include: { model: User } }],
+          },
+          { model: Tag },
+        ],
+      });
+      if (!question) {
+        throw new RecordNotFoundError(Question, id);
+      }
+      response.json(question);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async showCard(request, response, next) {
+    try {
+      const { id } = request.params;
+      const question = await Question.findOne({
+        where: { id },
+        include: [
+          { model: User },
+          {
+            model: Answer,
+            include: [{ model: User }, { model: Vote }],
           },
           { model: Tag },
         ],
@@ -63,6 +86,34 @@ const QuestionsController = {
       Question.destroy({ where: { id } }).then(() => {
         response.json({ status: 200, ok: true });
       });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getFeed(request, response, next) {
+    const { limit = 20, offset = 0 } = request.params;
+    try {
+      const spaceIds = (await response.locals.currentUser.getSpaces())
+        .map((space) => space.id)
+        .concat(
+          (
+            await Promise.all(
+              (await response.locals.currentUser.getTopics()).map((topic) => topic.getSpaces()),
+            )
+          ).map((space) => space.id),
+        );
+      const questions = await Question.findAll({
+        where: { spaceId: spaceIds },
+        order: [
+          ['createdAt', 'DESC'],
+          ['id', 'DESC'],
+        ],
+        include: { model: Answer, include: [{ model: User }, { model: Vote }] },
+        limit,
+        offset,
+      });
+      console.log(questions);
+      response.json(questions);
     } catch (e) {
       next(e);
     }
