@@ -1,11 +1,4 @@
-const Sequelize = require('sequelize');
 const User = require('../../../models/user.model');
-const Topic = require('../../../models/topic.model');
-const Space = require('../../../models/space.model');
-const Question = require('../../../models/question.model');
-const Answer = require('../../../models/answer.model');
-const Reply = require('../../../models/reply.model');
-const Vote = require('../../../models/vote.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 module.exports = {
@@ -54,98 +47,9 @@ module.exports = {
   },
   async currentUser(request, response, next) {
     try {
-      const currentUser = await User.findOne({
-        where: { id: response.locals.currentUser.id },
-        include: [
-          {
-            model: Topic,
-            required: false,
-            include: {
-              model: Space,
-              required: false,
-              include: {
-                model: Question,
-                required: false,
-                include: [
-                  { model: User, required: false },
-                  {
-                    model: Answer,
-                    required: false,
-                    include: [{ model: Vote, required: false }, { model: User }],
-                  },
-                ],
-              },
-            },
-          },
-          {
-            model: Space,
-            required: false,
-            include: {
-              model: Question,
-              required: false,
-              include: [
-                { model: User, required: false },
-                {
-                  model: Answer,
-                  required: false,
-                  include: [
-                    { model: Vote, required: false },
-                    { model: User, required: false },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      });
-      response.json(currentUser);
+      response.json(response.locals.currentUser);
     } catch (e) {
       next(e);
     }
   },
 };
-
-// include: [
-//   {
-//     model: Topic,
-//     required: false,
-//     include: {
-//       model: Space,
-//       required: false,
-//       include: {
-//         model: Question,
-//         required: false,
-//         include: [
-//           { model: User, required: false },
-//           {
-//             model: Answer,
-//             required: false,
-//             include: [
-//               { model: Reply, required: false, include: { model: User, required: false } },
-//               { model: User, required: false },
-//             ],
-//           },
-//         ],
-//       },
-//     },
-//   },
-//   {
-//     model: Space,
-//     required: false,
-//     include: {
-//       model: Question,
-//       required: false,
-//       include: [
-//         { model: User, required: false },
-//         {
-//           model: Answer,
-//           required: false,
-//           include: [
-//             { model: Reply, required: false, include: { model: User, required: false } },
-//             { model: User, required: false },
-//           ],
-//         },
-//       ],
-//     },
-//   },
-// ]
