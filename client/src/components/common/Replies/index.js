@@ -48,7 +48,6 @@ class Replies extends Component {
   }
   render() {
     const { replies = [], showLoadReplies } = this.state;
-    console.log(replies);
     return (
       <div>
         <ReplyForm onSubmit={this.onSubmitReplyForm} />
