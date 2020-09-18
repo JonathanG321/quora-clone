@@ -112,7 +112,6 @@ const QuestionsController = {
         limit,
         offset,
       });
-      console.log(questions);
       response.json(questions);
     } catch (e) {
       next(e);
