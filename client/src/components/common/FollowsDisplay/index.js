@@ -17,7 +17,6 @@ class FollowsDisplay extends Component {
   }
   render() {
     const { follows } = this.state;
-    console.log(follows);
     if (follows.length === 0) {
       return <Loading />;
     }
