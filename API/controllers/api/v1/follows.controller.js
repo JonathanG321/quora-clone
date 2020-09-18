@@ -20,7 +20,7 @@ module.exports = {
       if (follows.length === 0) {
         throw new RecordNotFoundError(Topic, id);
       }
-      response.json({ follows });
+      response.json(follows);
     } catch (e) {
       next(e);
     }
