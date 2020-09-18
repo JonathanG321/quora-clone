@@ -19,4 +19,9 @@ export const Question = {
       credentials: 'include',
     }).then((res) => res.json());
   },
+  oneCard(id) {
+    return fetch(`${API_URL}/questions/${id}/card`, {
+      credentials: 'include',
+    }).then((res) => res.json());
+  },
 };
