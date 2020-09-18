@@ -12,8 +12,11 @@ class FollowsDisplay extends Component {
     };
   }
   async componentDidMount() {
-    const follows = await Feed.getFollows();
-    this.setState(follows);
+    const follows = (await Feed.getFollows()).map((follow) => {
+      follow.topicId ? (follow.type = 'space') : (follow.type = 'topic');
+      return follow;
+    });
+    this.setState({ follows });
   }
   render() {
     const { follows } = this.state;
