@@ -1,7 +1,10 @@
 const Sequelize = require('sequelize');
 const Topic = require('../../../models/topic.model');
 const Space = require('../../../models/space.model');
+const Question = require('../../../models/question.model');
 const User = require('../../../models/user.model');
+const Answer = require('../../../models/answer.model');
+const Vote = require('../../../models/vote.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 const TopicsController = {
@@ -56,6 +59,26 @@ const TopicsController = {
       Topic.destroy({ where: { id } }).then(() => {
         response.json({ status: 200, ok: true });
       });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getQuestions(request, response, next) {
+    const { limit = 20, offset = 0, topicId } = request.params;
+    try {
+      const spaceIds = (await Space.findAll({ where: { topicId } })).map((space) => space.id);
+      const questions = await Question.findAll({
+        where: { spaceId: spaceIds },
+        order: [
+          ['createdAt', 'DESC'],
+          ['id', 'DESC'],
+        ],
+        include: { model: Answer, include: [{ model: User }, { model: Vote }] },
+        limit,
+        offset,
+      });
+      console.log(questions);
+      response.json(questions);
     } catch (e) {
       next(e);
     }
