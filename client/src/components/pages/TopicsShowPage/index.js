@@ -6,6 +6,7 @@ import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
 import QuestionCard from '../../common/QuestionCard';
 import { Topic } from '../../../requests/topic';
+import { Question } from '../../../requests/question';
 import './styles.scss';
 
 class HomePage extends Component {
@@ -25,18 +26,25 @@ class HomePage extends Component {
       } else {
         this.setState({ user, isLoading: false });
         this.getFeed();
+        this.getQuestions();
       }
     });
   }
-  async getFeed() {
-    const questions = await Topic.getTopic();
+  async getQuestions() {
+    const { id } = this.props.match.params;
+    const questions = await Question.getTopicQuestions(id);
     this.setState({ questions });
+  }
+  async getFeed() {
+    const { id } = this.props.match.params;
+    const topic = await Topic.getTopic(id);
+    this.setState({ topic });
   }
   componentDidMount() {
     this.setCurrentUser();
   }
   render() {
-    const { isLoading, questions } = this.state;
+    const { isLoading, topic, questions } = this.state;
     if (isLoading) {
       return <Loading />;
     }
@@ -46,11 +54,14 @@ class HomePage extends Component {
           <FollowsDisplay />
         </div>
         <div className="feed col col-md-9">
-          {questions
-            .filter((question) => question.answers && question.answers.length)
-            .map((question) => (
-              <QuestionCard key={question.id} question={question} />
-            ))}
+          <h1 className="d-flex justify-content-center">{topic.name}</h1>
+          <div>
+            {questions
+              .filter((question) => question.answers && question.answers.length)
+              .map((question) => (
+                <QuestionCard key={question.id} question={question} />
+              ))}
+          </div>
         </div>
       </main>
     );
