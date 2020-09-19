@@ -64,7 +64,7 @@ class App extends Component {
               <Route path="/tags/:id">
                 <TagsShowPage />
               </Route>
-              <Route path="/topics/:id">
+              <Route path="/topic/:id">
                 <TopicsShowPage />
               </Route>
               <Route path="*">
