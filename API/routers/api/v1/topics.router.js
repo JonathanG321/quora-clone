@@ -10,6 +10,8 @@ const router = new Router();
 
 router.get('/:id', ApiV1TopicsController.show);
 
+router.get('/:topicId/questions', ApiV1TopicsController.getQuestions);
+
 router.use(Authentication.authenticate);
 
 router.post(
