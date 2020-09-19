@@ -24,4 +24,9 @@ export const Question = {
       credentials: 'include',
     }).then((res) => res.json());
   },
+  getTopicQuestions(id) {
+    return fetch(`${API_URL}/topics/${id}/questions`, {
+      credentials: 'include',
+    }).then((res) => res.json());
+  },
 };
