@@ -55,7 +55,7 @@ class Replies extends Component {
           return (
             <div key={index} className="reply-card card-body pb-3">
               {reply.user.firstName} {reply.user.lastName}
-              <span className="date">
+              <span className="stamp">
                 {' '}
                 •{' '}
                 {new Date(reply.createdAt).toLocaleDateString(undefined, {

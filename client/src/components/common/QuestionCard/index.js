@@ -39,6 +39,7 @@ class QuestionCard extends Component {
     return (
       <div className="card mb-2">
         <div className="card-body">
+          <div className="stamp">Answer • {question.spaceName}</div>
           <div>
             {answers[0].user.firstName} {answers[0].user.lastName}
           </div>

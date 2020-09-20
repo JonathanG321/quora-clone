@@ -5,6 +5,7 @@ const Answer = require('../../../models/answer.model');
 const Reply = require('../../../models/reply.model');
 const Tag = require('../../../models/tag.model');
 const Vote = require('../../../models/vote.model');
+const Space = require('../../../models/space.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 const QuestionsController = {
@@ -47,6 +48,8 @@ const QuestionsController = {
       if (!question) {
         throw new RecordNotFoundError(Question, id);
       }
+      const space = await Space.findOne({ where: { id: question.spaceId } });
+      question.dataValues.spaceName = space.name;
       response.json(question);
     } catch (e) {
       next(e);
