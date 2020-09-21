@@ -29,8 +29,9 @@ export const Question = {
       credentials: 'include',
     }).then((res) => res.json());
   },
-  findNew() {
-    return fetch(`${API_URL}/questions/new`, {
+  findRecent() {
+    return fetch(`${API_URL}/questions/recent`, {
+      method: 'GET',
       credentials: 'include',
     }).then((res) => res.json());
   },
