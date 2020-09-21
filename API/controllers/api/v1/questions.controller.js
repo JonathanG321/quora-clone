@@ -120,7 +120,7 @@ const QuestionsController = {
       next(e);
     }
   },
-  async getNew() {
+  async getRecent(request, response, next) {
     try {
       const questions = await Question.findAll({ limit: 10, include: { model: Answer } });
       const spaceIds = questions.map((question) => question.spaceId);
@@ -129,9 +129,8 @@ const QuestionsController = {
       );
       const completeQuestions = questions.map((question, index) => {
         question.dataValues.spaceName = spaceNames[index];
-        return space;
+        return question;
       });
-      console.log(completeQuestions);
       response.json(completeQuestions);
     } catch (e) {
       next(e);
