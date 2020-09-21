@@ -9,9 +9,10 @@ import {
   TagsShowPage,
   TopicsShowPage,
 } from './pages';
-// import AuthRoute from './common/AuthRoute';
+import AuthRoute from './common/AuthRoute';
 import Loading from '../components/common/Loading';
 import { User } from '../requests/user';
+import AnswersPage from './pages/AnswersPage';
 import './styles.scss';
 
 const initialState = { user: null };
@@ -52,9 +53,12 @@ class App extends Component {
           <NavBar onSignOut={this.signOut} user={user} />
           <div className="container-fluid pr-0 pl-0 max-height max-width">
             <Switch>
-              <Route exact path="/">
+              <AuthRoute isSignedIn={!!user} exact path="/">
                 <HomePage />
-              </Route>
+              </AuthRoute>
+              <AuthRoute isSignedIn={!!user} exact path="/answers">
+                <AnswersPage />
+              </AuthRoute>
               <Route exact path="/sign-in">
                 <SignInPage onSignIn={this.signIn} />
               </Route>

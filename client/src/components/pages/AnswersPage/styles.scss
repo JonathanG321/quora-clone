@@ -1,0 +1,28 @@
+.follow-list-item {
+  width: 100%;
+  padding: 0.24em 0.5em;
+  display: block;
+  color: rgb(100, 101, 103);
+  text-decoration: none;
+}
+
+.follow-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-decoration: none;
+  color: rgb(100, 101, 103);
+}
+
+ul {
+  padding: 0px;
+}
+
+.max-width {
+  width: 100%;
+}
+
+.home-page {
+  width: 100%;
+  height: 100%;
+  padding-top: 1em;
+}
