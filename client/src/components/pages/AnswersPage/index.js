@@ -13,29 +13,13 @@ class Answers extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      user: null,
-      questions: [],
     };
   }
-  async setCurrentUser() {
-    await User.getCurrentUser().then(async (user) => {
-      if (!user.id) {
-        this.setState({ isLoading: false });
-      } else {
-        this.setState({ user, isLoading: false });
-        this.getQuestions();
-      }
-    });
-  }
-  async getQuestions() {
-    const questions = await Question.findNew();
-    this.setState({ questions });
-  }
   componentDidMount() {
-    this.setCurrentUser();
+    this.setState({ isLoading: false });
   }
   render() {
-    const { isLoading, questions } = this.state;
+    const { isLoading } = this.state;
     if (isLoading) {
       return <Loading />;
     }
@@ -64,7 +48,7 @@ class Answers extends Component {
         </div>
         <div className="feed col col-md-9">
           <div>
-            <QuestionsCard questions={questions} />
+            <QuestionsCard />
           </div>
         </div>
       </main>
