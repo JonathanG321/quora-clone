@@ -29,4 +29,9 @@ export const Question = {
       credentials: 'include',
     }).then((res) => res.json());
   },
+  findNew() {
+    return fetch(`${API_URL}/questions/new`, {
+      credentials: 'include',
+    }).then((res) => res.json());
+  },
 };
