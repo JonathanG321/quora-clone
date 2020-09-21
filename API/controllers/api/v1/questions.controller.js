@@ -120,6 +120,23 @@ const QuestionsController = {
       next(e);
     }
   },
+  async getNew() {
+    try {
+      const questions = await Question.findAll({ limit: 10, include: { model: Answer } });
+      const spaceIds = questions.map((question) => question.spaceId);
+      const spaceNames = (await Space.findAll({ where: { id: spaceIds } })).map(
+        (space) => space.name,
+      );
+      const completeQuestions = questions.map((question, index) => {
+        question.dataValues.spaceName = spaceNames[index];
+        return space;
+      });
+      console.log(completeQuestions);
+      response.json(completeQuestions);
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 module.exports = QuestionsController;
