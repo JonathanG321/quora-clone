@@ -14,37 +14,36 @@ class HomePage extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      user: null,
       questions: [],
       topic: {},
     };
   }
-  async setCurrentUser() {
-    await User.getCurrentUser().then(async (user) => {
-      if (!user.id) {
-        this.setState({ isLoading: false });
-      } else {
-        this.setState({ user, isLoading: false });
-        this.getFeed();
-        this.getQuestions();
-      }
-    });
+  async setup() {
+    this.setState({ isLoading: false });
+    this.getTopic();
+    this.getQuestions();
   }
   async getQuestions() {
     const { id } = this.props.match.params;
     const questions = await Question.getTopicQuestions(id);
     this.setState({ questions });
   }
-  async getFeed() {
+  async getTopic() {
     const { id } = this.props.match.params;
     const topic = await Topic.getTopic(id);
     this.setState({ topic });
   }
   componentDidMount() {
-    this.setCurrentUser();
+    this.setup();
+  }
+  componentDidUpdate(oldProps, oldState) {
+    if (oldProps.match.params.id !== this.props.match.params.id) {
+      this.setup();
+    }
   }
   render() {
     const { isLoading, topic, questions } = this.state;
+    console.log(this.props.match.params);
     if (isLoading) {
       return <Loading />;
     }
