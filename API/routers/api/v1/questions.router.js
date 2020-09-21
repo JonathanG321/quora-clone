@@ -16,6 +16,8 @@ router.use('/:questionId/dislikes', dislikesRouter);
 
 router.get('/:id/card', ApiV1QuestionsController.showCard);
 
+router.get('/new', ApiV1QuestionsController.getNew);
+
 router.get('/feed', Authentication.authenticate, ApiV1QuestionsController.getFeed);
 
 router.get('/:id', ApiV1QuestionsController.show);
