@@ -7,7 +7,7 @@ import Loading from '../Loading';
 import './styles.scss';
 import { Question } from '../../../requests/question';
 
-class QuestionCard extends Component {
+class AnswerCard extends Component {
   constructor(props) {
     super(props);
     const { question } = props;
@@ -78,7 +78,7 @@ function calcVoteCount(votes) {
   return votes.reduce((acc, vote) => (vote.isUpVote ? acc + 1 : acc - 1), 0);
 }
 
-QuestionCard.propTypes = {
+AnswerCard.propTypes = {
   question: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -102,9 +102,9 @@ QuestionCard.propTypes = {
   onSubmitReplyForm: PropTypes.func.isRequired,
 };
 
-QuestionCard.defaultProps = {
+AnswerCard.defaultProps = {
   question: {},
   onSubmitReplyForm: () => {},
 };
 
-export default QuestionCard;
+export default AnswerCard;

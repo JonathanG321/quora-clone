@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
 import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
-import QuestionCard from '../../common/QuestionCard';
+import AnswerCard from '../../common/AnswerCard';
 import { Topic } from '../../../requests/topic';
 import { Question } from '../../../requests/question';
 import './styles.scss';
@@ -59,7 +59,7 @@ class HomePage extends Component {
             {questions
               .filter((question) => question.answers && question.answers.length)
               .map((question) => (
-                <QuestionCard key={question.id} question={question} />
+                <AnswerCard key={question.id} question={question} />
               ))}
           </div>
         </div>
