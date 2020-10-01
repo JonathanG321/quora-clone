@@ -17,9 +17,6 @@ module.exports = {
             return topic;
           }),
         );
-      if (follows.length === 0) {
-        throw new RecordNotFoundError(Topic, id);
-      }
       response.json(follows);
     } catch (e) {
       next(e);

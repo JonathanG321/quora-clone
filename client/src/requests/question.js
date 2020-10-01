@@ -35,4 +35,10 @@ export const Question = {
       credentials: 'include',
     }).then((res) => res.json());
   },
+  related(spaceId) {
+    return fetch(`${API_URL}/questions/related/${spaceId}`, {
+      method: 'GET',
+      credentials: 'include',
+    }).then((res) => res.json());
+  },
 };

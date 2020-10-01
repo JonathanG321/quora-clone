@@ -5,9 +5,14 @@ import {
   HomePage,
   NotFoundPage,
   SignInPage,
+  SignUpPage,
   QuestionsShowPage,
   TagsShowPage,
   TopicsShowPage,
+  SpacesPage,
+  TopicsPage,
+  AddQuestionPage,
+  SpacesShowPage,
 } from './pages';
 import AuthRoute from './common/AuthRoute';
 import Loading from '../components/common/Loading';
@@ -59,8 +64,20 @@ class App extends Component {
               <AuthRoute isSignedIn={!!user} exact path="/answers">
                 <AnswersPage />
               </AuthRoute>
+              <AuthRoute isSignedIn={!!user} exact path="/spaces">
+                <SpacesPage />
+              </AuthRoute>
+              <AuthRoute isSignedIn={!!user} exact path="/topics">
+                <TopicsPage />
+              </AuthRoute>
+              <AuthRoute isSignedIn={!!user} exact path="/add-question">
+                <AddQuestionPage />
+              </AuthRoute>
               <Route exact path="/sign-in">
                 <SignInPage onSignIn={this.signIn} />
+              </Route>
+              <Route exact path="/sign-up">
+                <SignUpPage onSignUp={this.signIn} />
               </Route>
               <Route path="/questions/:id">
                 <QuestionsShowPage />
@@ -70,6 +87,9 @@ class App extends Component {
               </Route>
               <Route path="/topic/:id">
                 <TopicsShowPage />
+              </Route>
+              <Route path="/space/:id">
+                <SpacesShowPage />
               </Route>
               <Route path="*">
                 <NotFoundPage />

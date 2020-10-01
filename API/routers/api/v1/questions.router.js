@@ -18,6 +18,8 @@ router.get('/:id/card', ApiV1QuestionsController.showCard);
 
 router.get('/recent', ApiV1QuestionsController.getRecent);
 
+router.get('/related/:spaceId', ApiV1QuestionsController.getRelated);
+
 router.get('/feed', Authentication.authenticate, ApiV1QuestionsController.getFeed);
 
 router.get('/:id', ApiV1QuestionsController.show);

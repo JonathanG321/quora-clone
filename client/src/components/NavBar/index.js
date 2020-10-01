@@ -64,10 +64,10 @@ function NavBar(props) {
             <NavLink
               className="nav-link align-items-center d-flex justify-content-center"
               exact
-              to="/notifications"
+              to="/topics"
             >
-              <Fa type="r" kind={'bell'} size="lg" />
-              <strong className="ml-1 d-none d-md-block">Notifications</strong>
+              <Fa kind={'comments'} size="lg" />
+              <strong className="ml-1 d-none d-md-block">Topics</strong>
             </NavLink>
           </div>
           {!isSignedIn && (
@@ -93,16 +93,31 @@ function NavBar(props) {
             </>
           )}
           {isSignedIn && (
-            <div className="nav-item">
-              <a
-                className="nav-link align-items-center d-flex justify-content-center"
-                href="/sign-out"
-                onClick={handleSignOut}
-              >
-                <strong>Sign Out</strong>
-              </a>
-            </div>
+            <>
+              <div className="nav-item d-flex justify-content-center align-items-center ">
+                <img className="align-items-center avatar" src={user.avatar} />
+              </div>
+              <div className="nav-item">
+                <a
+                  className="nav-link align-items-center d-flex justify-content-center"
+                  href="/sign-out"
+                  onClick={handleSignOut}
+                >
+                  <strong>Sign Out</strong>
+                </a>
+              </div>
+            </>
           )}
+          <div>
+            <button
+              className="align-items-center d-flex justify-content-center ml-2 add-question-button"
+              to="/topics"
+            >
+              <NavLink className="hide-styling" exact to="/add-question">
+                <strong>Add Question</strong>
+              </NavLink>
+            </button>
+          </div>
         </div>
       </nav>
     </div>

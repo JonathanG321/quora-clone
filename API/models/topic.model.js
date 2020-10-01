@@ -11,16 +11,7 @@ const Topic = sequelize.define('topics', {
       },
     },
   },
-  tagline: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'Tagline cannot be empty',
-      },
-    },
-  },
-  description: {
+  image: {
     type: Sequelize.TEXT,
     allowNull: false,
     validate: {

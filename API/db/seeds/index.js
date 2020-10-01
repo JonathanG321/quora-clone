@@ -16,6 +16,7 @@ async function seed() {
     email: 'jon@winterfell.gov',
     firstName: 'Jon',
     lastName: 'Snow',
+    isAdmin: true,
     password: 'supersecret',
     passwordConfirmation: 'supersecret',
   });
@@ -25,6 +26,7 @@ async function seed() {
       email: faker.internet.email(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      image: faker.image.avatar(),
       password: 'supersecret',
       passwordConfirmation: 'supersecret',
     })),
@@ -33,10 +35,9 @@ async function seed() {
   const users = await User.findAll();
 
   await Topic.bulkCreate(
-    Array.from({ length: randomBetween(4, 7) }).map(() => ({
+    Array.from({ length: randomBetween(10, 17) }).map(() => ({
       name: faker.company.bsNoun(),
-      tagline: faker.lorem.sentence(),
-      description: faker.lorem.paragraphs(5),
+      image: faker.image.nightlife(undefined, undefined, true),
     })),
   );
 
@@ -45,8 +46,12 @@ async function seed() {
   await Space.bulkCreate(
     topics
       .map((topic) =>
-        Array.from({ length: randomBetween(2, 5) }).map(() => ({
+        Array.from({ length: randomBetween(6, 9) }).map(() => ({
           name: faker.company.bsNoun(),
+          image: faker.image.avatar(),
+          banner: faker.image.nature(undefined, undefined, true),
+          tagline: faker.lorem.sentence(),
+          description: faker.lorem.paragraphs(5),
           topicId: topic.id,
         })),
       )
@@ -58,7 +63,7 @@ async function seed() {
   await Question.bulkCreate(
     users
       .map((user) =>
-        Array.from({ length: randomBetween(5, 9) }).map(() => ({
+        Array.from({ length: randomBetween(15, 20) }).map(() => ({
           title: faker.company.catchPhrase(),
           body: faker.lorem.paragraph(),
           userId: user.id,
@@ -119,7 +124,7 @@ async function seed() {
   const tags = await Tag.findAll();
 
   await Vote.bulkCreate(
-    Array.from({ length: randomBetween(1000, 1250) }).map(() => ({
+    Array.from({ length: randomBetween(2000, 2250) }).map(() => ({
       isUpVote: Math.random() > 0.25,
       userId: pickRandom(users).id,
       answerId: pickRandom(answers).id,
@@ -129,7 +134,7 @@ async function seed() {
   const votes = await Vote.findAll();
 
   await Dislike.bulkCreate(
-    Array.from({ length: randomBetween(30, 75) }).map(() => ({
+    Array.from({ length: randomBetween(60, 105) }).map(() => ({
       userId: pickRandom(users).id,
       questionId: pickRandom(questions).id,
     })),
@@ -140,7 +145,7 @@ async function seed() {
   await Promise.all(
     questions.map((question) => {
       const questionTags = Array.from(
-        new Set(Array.from({ length: randomBetween(0, 3) }).map(() => pickRandom(tags))),
+        new Set(Array.from({ length: randomBetween(5, 8) }).map(() => pickRandom(tags))),
       );
       return question.addTags(questionTags);
     }),
@@ -149,7 +154,7 @@ async function seed() {
   await Promise.all(
     users.map((user) => {
       const userTopics = Array.from(
-        new Set(Array.from({ length: randomBetween(0, 3) }).map(() => pickRandom(topics))),
+        new Set(Array.from({ length: randomBetween(4, 6) }).map(() => pickRandom(topics))),
       );
       return user.addTopics(userTopics);
     }),
@@ -158,7 +163,7 @@ async function seed() {
   await Promise.all(
     users.map((user) => {
       const userSpaces = Array.from(
-        new Set(Array.from({ length: randomBetween(0, 7) }).map(() => pickRandom(spaces))),
+        new Set(Array.from({ length: randomBetween(10, 15) }).map(() => pickRandom(spaces))),
       );
       return user.addSpaces(userSpaces);
     }),

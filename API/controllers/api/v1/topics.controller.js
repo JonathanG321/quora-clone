@@ -16,6 +16,25 @@ const TopicsController = {
       next(e);
     }
   },
+  async userTopics(request, response, next) {
+    try {
+      const user = await User.findOne({
+        where: { id: response.locals.currentUser.id },
+        include: { model: Topic, include: { model: Space } },
+      });
+      response.json(user.topics);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async allTopics(request, response, next) {
+    try {
+      const topics = await Topic.findAll();
+      response.json(topics);
+    } catch (e) {
+      next(e);
+    }
+  },
   async show(request, response, next) {
     try {
       const { id } = request.params;
@@ -77,8 +96,61 @@ const TopicsController = {
         limit,
         offset,
       });
-      console.log(questions);
       response.json(questions);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getFollow(request, response, next) {
+    try {
+      const { id } = request.params;
+      const topic = await Topic.findOne({
+        where: { id },
+        include: { model: User },
+      });
+      if (!topic) {
+        throw new RecordNotFoundError(Topic, id);
+      }
+      const isFollowed = !!topic.users.filter((user) => user.id === response.locals.currentUser.id)
+        .length;
+      response.json({ isFollowed });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getFollows(request, response, next) {
+    try {
+      const { id } = request.params;
+      const topic = await Topic.findOne({
+        where: { id },
+        include: { model: User },
+      });
+      if (!topic) {
+        throw new RecordNotFoundError(Topic, id);
+      }
+      response.json(topic.users);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async follow(request, response, next) {
+    try {
+      const { id } = request.params;
+      const topic = await Topic.findOne({ where: { id } });
+      const user = await User.findOne({ where: { id: response.locals.currentUser.id } });
+      await user.addTopic(topic);
+      response.status(201).json(topic);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async unFollow(request, response, next) {
+    try {
+      const { id } = request.params;
+      const topic = await Topic.findOne({ where: { id } });
+      const user = await User.findOne({ where: { id: response.locals.currentUser.id } });
+      await user.removeTopic(topic);
+      response.json({ status: 200, ok: true });
     } catch (e) {
       next(e);
     }

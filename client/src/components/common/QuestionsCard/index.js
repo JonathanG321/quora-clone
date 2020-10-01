@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Fa from '../Fa';
 import Loading from '../Loading';
-import './styles.scss';
 import { Question } from '../../../requests/question';
+import { Link } from 'react-router-dom';
+import Fa from '../Fa';
+import QuestionTab from '../QuestionTab';
+import './styles.scss';
 
 class QuestionsCard extends Component {
   constructor(props) {
@@ -14,7 +16,7 @@ class QuestionsCard extends Component {
     };
   }
   async componentDidMount() {
-    const questions = await Question.findNew();
+    const questions = await Question.findRecent();
     this.setState({ isLoading: false, questions });
   }
   render() {
@@ -24,10 +26,15 @@ class QuestionsCard extends Component {
     }
     return (
       <div className="card">
-        <div className="card-body">
-          <div className="star-block">★</div>
+        <div className="card-body border-bottom card-padding d-flex align-items-center">
+          <div className="star-block d-flex justify-content-center align-items-center">★</div>
+          <span className="stamp ml-2">Questions For you</span>
         </div>
-        <div className="card-body">{questions.forEach((question) => {})}</div>
+        <ul className="mb-0">
+          {questions.map((question) => {
+            return <QuestionTab key={question.id} {...question} />;
+          })}
+        </ul>
       </div>
     );
   }

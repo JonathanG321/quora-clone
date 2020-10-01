@@ -8,11 +8,23 @@ const router = new Router();
 
 // /api/v1/topics
 
+router.get('/all', ApiV1TopicsController.allTopics);
+
+router.get('/', ApiV1TopicsController.userTopics);
+
 router.get('/:id', ApiV1TopicsController.show);
 
 router.get('/:topicId/questions', ApiV1TopicsController.getQuestions);
 
+router.get('/:id/follows', ApiV1TopicsController.getFollows);
+
+router.get('/:id/follow', ApiV1TopicsController.getFollow);
+
 router.use(Authentication.authenticate);
+
+router.post('/:id/follow', ApiV1TopicsController.follow);
+
+router.delete('/:id/follow', ApiV1TopicsController.unFollow);
 
 router.post(
   '/',

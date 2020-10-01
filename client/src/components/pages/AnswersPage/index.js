@@ -25,31 +25,8 @@ class Answers extends Component {
     }
     return (
       <main className="d-flex home-page">
-        <div className="topics col d-none d-md-block col-3">
-          <h3>Questions</h3>
-          <hr />
-          <ul>
-            <li className="max-width">
-              <Link className="mt-1 mb-1 follow-list-item" to={`/`}>
-                Questions for you
-              </Link>
-            </li>
-            <li className="max-width">
-              <Link className="mt-1 mb-1 follow-list-item" to={`/`}>
-                Answer requests
-              </Link>
-            </li>
-            <li className="max-width">
-              <Link className="mt-1 mb-1 follow-list-item" to={`/`}>
-                Answer drafts
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div className="feed col col-md-9">
-          <div>
-            <QuestionsCard />
-          </div>
+        <div className="feed m-3 max-width">
+          <QuestionsCard />
         </div>
       </main>
     );

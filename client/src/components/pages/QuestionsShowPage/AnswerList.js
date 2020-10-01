@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnswerDetails from './AnswerDetails';
-import ReplyList from './ReplyList';
 
 function AnswerList(props) {
   const { answers } = props;
@@ -10,8 +9,12 @@ function AnswerList(props) {
       <ul className="answers">
         {answers.map((answer) => (
           <li className="answer" key={answer.id}>
-            <AnswerDetails user={answer.user} createdAt={answer.createdAt} body={answer.body} />
-            <ReplyList replies={answer.replies} />
+            <AnswerDetails
+              id={answer.id}
+              user={answer.user}
+              createdAt={answer.createdAt}
+              body={answer.body}
+            />
             <hr />
           </li>
         ))}

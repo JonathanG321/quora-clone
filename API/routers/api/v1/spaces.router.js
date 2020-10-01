@@ -8,9 +8,21 @@ const router = new Router();
 
 // /api/v1/spaces
 
+router.get('/', ApiV1SpacesController.getSpaces);
+
+router.get('/topic/:id', ApiV1SpacesController.getTopicSpaces);
+
+router.get('/:id/follows', ApiV1SpacesController.getFollows);
+
+router.get('/:id/follow', ApiV1SpacesController.getFollow);
+
 router.get('/:id', ApiV1SpacesController.show);
 
 router.use(Authentication.authenticate);
+
+router.post('/:id/follow', ApiV1SpacesController.follow);
+
+router.delete('/:id/follow', ApiV1SpacesController.unFollow);
 
 router.post(
   '/',

@@ -10,6 +10,8 @@ const router = new Router({ mergeParams: true });
 
 router.use(Authentication.authenticate);
 
+router.get('/', ApiV1DislikesController.getDislike);
+
 router.post(
   '/',
   Authorization.authorizeCurrentUser('create', () => new Dislike()),

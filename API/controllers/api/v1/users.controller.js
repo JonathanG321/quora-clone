@@ -1,4 +1,6 @@
 const User = require('../../../models/user.model');
+const Space = require('../../../models/space.model');
+const Topic = require('../../../models/topic.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 module.exports = {
@@ -8,6 +10,7 @@ module.exports = {
       const newUser = {
         firstName,
         lastName,
+        avatar,
         password,
         passwordConfirmation,
         email: email.toLowerCase(),
@@ -41,6 +44,34 @@ module.exports = {
         throw new RecordNotFoundError(User, id);
       }
       response.json({ user });
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getUserSpaces(request, response, next) {
+    try {
+      const user = await User.findOne({
+        where: { id: response.locals.currentUser.id },
+        include: { model: Space },
+      });
+      if (!user) {
+        throw new RecordNotFoundError(User, id);
+      }
+      response.json(user.spaces);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getUserTopics(request, response, next) {
+    try {
+      const user = await User.findOne({
+        where: { id: response.locals.currentUser.id },
+        include: { model: Topic },
+      });
+      if (!user) {
+        throw new RecordNotFoundError(User, id);
+      }
+      response.json(user.topics);
     } catch (e) {
       next(e);
     }

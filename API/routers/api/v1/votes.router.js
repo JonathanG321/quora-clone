@@ -10,13 +10,13 @@ const router = new Router({ mergeParams: true });
 
 router.use(Authentication.authenticate);
 
+router.get('/', ApiV1VotesController.getVote);
+
 router.post(
   '/',
   Authorization.authorizeCurrentUser('create', () => new Vote()),
   ApiV1VotesController.create,
 );
-
-router.patch('/', Authorization.authorizeCurrentUser('edit', getVote), ApiV1VotesController.update);
 
 router.delete(
   '/',

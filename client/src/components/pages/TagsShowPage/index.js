@@ -3,6 +3,7 @@ import { Tag } from '../../../requests/tag';
 import { Link } from 'react-router-dom';
 import Loading from '../../common/Loading';
 import Fa from '../../common/Fa';
+import QuestionTab from '../../common/QuestionTab';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
@@ -36,44 +37,7 @@ class TagsShowPage extends Component {
         <ul>
           <hr />
           {tag.questions.map((question) => (
-            <li key={question.id}>
-              <div className="d-flex">
-                <Link className="d-flex align-items-center mr-2" to={`/questions/${question.id}`}>
-                  <h6 className="mb-0">{question.title}</h6>{' '}
-                </Link>
-                <span className="d-flex align-items-center mr-1">
-                  {new Date(question.createdAt).toLocaleDateString(undefined, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </span>
-                <span>
-                  <div className="answer-button d-flex justify-content-center align-items-center">
-                    <Fa type="r" size="lg" kind="thumbs-down" />
-                    <span className="ml-1">{question.dislikes.length}</span>
-                  </div>
-                </span>
-              </div>
-              <div>{question.body}</div>
-              <div className="ml-5">
-                <hr />
-                <div className="d-flex">
-                  <h6 className="d-flex align-items-center mb-0 mr-2">
-                    {question.answers[0].user.firstName} {question.answers[0].user.lastName}
-                  </h6>
-                  <span>
-                    {new Date(question.answers[0].createdAt).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </div>
-                <div>{question.answers[0].body}</div>
-              </div>
-              <hr />
-            </li>
+            <QuestionTab key={question.id} showBody={true} {...question} />
           ))}
         </ul>
       </main>

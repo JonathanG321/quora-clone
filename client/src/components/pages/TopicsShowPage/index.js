@@ -5,9 +5,11 @@ import { withRouterPropTypes } from '../../../PropTypes/withRouterPropTypes';
 import { User } from '../../../requests/user';
 import FollowsDisplay from '../../common/FollowsDisplay';
 import AnswerCard from '../../common/AnswerCard';
+import RelatedSpacesDisplay from '../../common/RelatedSpacesDisplay';
 import { Topic } from '../../../requests/topic';
 import { Question } from '../../../requests/question';
 import './styles.scss';
+import FollowButton from '../../common/FollowButton';
 
 class HomePage extends Component {
   constructor(props) {
@@ -15,13 +17,46 @@ class HomePage extends Component {
     this.state = {
       isLoading: true,
       questions: [],
-      topic: {},
+      topic: null,
+      follows: [],
+      userFollowed: false,
     };
+    this.follow = this.follow.bind(this);
+    this.unFollow = this.unFollow.bind(this);
   }
   async setup() {
-    this.setState({ isLoading: false });
-    this.getTopic();
-    this.getQuestions();
+    await this.getTopic();
+    await this.setFollows();
+    await this.setUserFollow();
+    await this.getQuestions();
+    await this.setState({ isLoading: false });
+  }
+  async setFollows() {
+    const { topic } = this.state;
+    const follows = await Topic.getFollows(topic.id);
+    this.setUserFollow();
+    this.setState({ follows: follows });
+  }
+  async follow() {
+    const { topic } = this.state;
+    await Topic.follow(topic.id);
+    this.setFollows();
+    this.setUserFollow();
+    this.setState({ userFollowed: true });
+  }
+  async unFollow() {
+    const { topic } = this.state;
+    await Topic.unFollow(topic.id);
+    this.setFollows();
+    this.setUserFollow();
+    this.setState({ userFollowed: false });
+  }
+  async setUserFollow() {
+    const { topic } = this.state;
+    const userFollowed = await Topic.getFollow(topic.id);
+    if (userFollowed) {
+      this.setState({ userFollowed: userFollowed.isFollowed });
+    }
   }
   async getQuestions() {
     const { id } = this.props.match.params;
@@ -42,9 +77,8 @@ class HomePage extends Component {
     }
   }
   render() {
-    const { isLoading, topic, questions } = this.state;
-    console.log(this.props.match.params);
-    if (isLoading) {
+    const { isLoading, topic, questions, userFollowed, follows } = this.state;
+    if (isLoading || topic === null) {
       return <Loading />;
     }
     return (
@@ -53,7 +87,23 @@ class HomePage extends Component {
           <FollowsDisplay />
         </div>
         <div className="feed col col-md-9">
-          <h1 className="d-flex justify-content-center">{topic.name}</h1>
+          <div className="card mb-2">
+            <div className="card-body d-flex pb-3 mb-1 align-items-center">
+              <img className="topic-banner-image mr-3" src={topic.image} />
+              <div className="d-flex flex-column justify-content-center">
+                <span>
+                  <h1 className="d-flex mb-0">{topic.name}</h1>
+                </span>
+                <FollowButton
+                  onFollow={this.follow}
+                  onUnFollow={this.unFollow}
+                  isFollowed={userFollowed}
+                  follows={follows}
+                />
+              </div>
+            </div>
+          </div>
+          <RelatedSpacesDisplay topic={topic} />
           <div>
             {questions
               .filter((question) => question.answers && question.answers.length)

@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import Fa from '../Fa';
 import Replies from '../Replies';
 import Loading from '../Loading';
-import './styles.scss';
 import { Question } from '../../../requests/question';
+import { Answer } from '../../../requests/answer';
+import { Vote } from '../../../requests/vote';
+import './styles.scss';
 
 class AnswerCard extends Component {
   constructor(props) {
@@ -15,13 +17,37 @@ class AnswerCard extends Component {
       isLoading: true,
       question,
       showReplies: false,
+      answer: null,
+      vote: null,
     };
     this.toggleReplies = this.toggleReplies.bind(this);
+    this.vote = this.vote.bind(this);
+    this.unVote = this.unVote.bind(this);
   }
   async componentDidMount() {
     const { question } = this.state;
     const fullQuestion = await Question.oneCard(question.id);
-    this.setState({ isLoading: false, question: fullQuestion });
+    fullQuestion.answers.sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
+    if (!!fullQuestion.answers.length) {
+      this.setVote(fullQuestion.answers[0].id);
+    }
+    this.setState({ isLoading: false, question: fullQuestion, answer: fullQuestion.answers[0] });
+  }
+  async setVote(answerId) {
+    const vote = await Vote.getVote(answerId);
+    if (!!vote) {
+      this.setState({ vote });
+    }
+  }
+  async vote(isUpVote, answerId) {
+    const vote = await Vote.vote(isUpVote, answerId);
+    const newAnswer = await Answer.one(answerId);
+    this.setState({ vote, answer: newAnswer });
+  }
+  async unVote(answerId) {
+    const vote = await Vote.unVote(answerId);
+    const newAnswer = await Answer.one(answerId);
+    this.setState({ vote: null, answer: newAnswer });
   }
   toggleReplies() {
     this.setState((state) => ({
@@ -29,32 +55,56 @@ class AnswerCard extends Component {
     }));
   }
   render() {
-    const { question, isLoading, showReplies } = this.state;
+    const { question, isLoading, showReplies, vote, answer } = this.state;
     if (isLoading) {
       return <Loading />;
     }
-    const answers = question.answers
-      .concat([])
-      .sort((a, b) => calcVoteCount(b.votes) - calcVoteCount(a.votes));
+    if (!question.answers.length) {
+      return <div></div>;
+    }
     return (
       <div className="card mb-2">
         <div className="card-body">
           <div className="stamp">Answer • {question.spaceName}</div>
           <div>
-            {answers[0].user.firstName} {answers[0].user.lastName}
+            {answer.user.firstName} {answer.user.lastName}
           </div>
           <Link className="question-link" to={`/questions/${question.id}`}>
             <strong>{question.title}</strong>
           </Link>
-          <div>{answers[0].body}</div>
+          <div>{answer.body}</div>
           <div className="d-flex align-items-center">
-            <div className="dislike-button d-flex justify-content-center align-items-center">
-              <Fa type="r" size="lg" kind="arrow-alt-circle-up" color="blue" />
+            <div
+              onClick={
+                !!vote && vote.isUpVote
+                  ? () => this.unVote(answer.id)
+                  : () => this.vote(true, answer.id)
+              }
+              className="dislike-button mr-2 d-flex justify-content-center align-items-center"
+            >
+              <Fa
+                type="r"
+                size="lg"
+                kind="arrow-alt-circle-up"
+                color={!!vote && vote.isUpVote ? 'blue' : 'black'}
+              />
             </div>
-            <div className="dislike-button d-flex justify-content-center align-items-center">
-              <Fa type="r" size="lg" kind="arrow-alt-circle-down" />
+            <div
+              onClick={
+                !!vote && !vote.isUpVote
+                  ? () => this.unVote(answer.id)
+                  : () => this.vote(false, answer.id)
+              }
+              className="dislike-button d-flex justify-content-center align-items-center"
+            >
+              <Fa
+                type="r"
+                size="lg"
+                kind="arrow-alt-circle-down"
+                color={!!vote && !vote.isUpVote ? 'red' : 'black'}
+              />
             </div>
-            <div className="ml-1">{calcVoteCount(answers[0].votes)}</div>
+            <div className="ml-1">{calcVoteCount(answer.votes)}</div>
             <button
               onClick={this.toggleReplies}
               className="collapse-button dislike-button comments-button d-flex align-items-center ml-2 justify-content-center"
@@ -66,7 +116,7 @@ class AnswerCard extends Component {
         </div>
         {showReplies && (
           <div className="" id="comments">
-            <Replies answerId={answers[0].id} />
+            <Replies answerId={answer.id} />
           </div>
         )}
       </div>
@@ -83,21 +133,6 @@ AnswerCard.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
-    answers: PropTypes.arrayOf(
-      PropTypes.shape({
-        body: PropTypes.string.isRequired,
-        replies: PropTypes.arrayOf(
-          PropTypes.shape({
-            body: PropTypes.string.isRequired,
-          }),
-        ),
-        votes: PropTypes.arrayOf(
-          PropTypes.shape({
-            isUpVote: PropTypes.bool.isRequired,
-          }),
-        ),
-      }),
-    ).isRequired,
   }),
   onSubmitReplyForm: PropTypes.func.isRequired,
 };

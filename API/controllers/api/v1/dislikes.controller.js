@@ -2,6 +2,17 @@ const Sequelize = require('sequelize');
 const Dislike = require('../../../models/dislike.model');
 
 const DislikesController = {
+  async getDislike(request, response, next) {
+    try {
+      const { questionId } = request.params;
+      const dislike = await Dislike.findOne({
+        where: { userId: response.locals.currentUser.id, questionId },
+      });
+      response.json(dislike);
+    } catch (e) {
+      next(e);
+    }
+  },
   async create(request, response, next) {
     try {
       const { questionId } = request.params;

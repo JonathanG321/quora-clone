@@ -10,6 +10,10 @@ const router = new Router();
 
 router.get('/current', Authentication.authenticate, ApiV1UsersController.currentUser);
 
+router.get('/spaces', Authentication.authenticate, ApiV1UsersController.getUserSpaces);
+
+router.get('/topics', Authentication.authenticate, ApiV1UsersController.getUserTopics);
+
 router.post('/', ApiV1UsersController.create);
 
 router.get('/:id', ApiV1UsersController.show);

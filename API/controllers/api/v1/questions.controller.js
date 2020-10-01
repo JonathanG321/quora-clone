@@ -6,6 +6,7 @@ const Reply = require('../../../models/reply.model');
 const Tag = require('../../../models/tag.model');
 const Vote = require('../../../models/vote.model');
 const Space = require('../../../models/space.model');
+const Dislike = require('../../../models/dislike.model');
 const { RecordNotFoundError } = require('../../api.controller');
 
 const QuestionsController = {
@@ -21,6 +22,7 @@ const QuestionsController = {
             include: [{ model: User }, { model: Reply, include: { model: User } }],
           },
           { model: Tag },
+          { model: Dislike },
         ],
       });
       if (!question) {
@@ -42,7 +44,6 @@ const QuestionsController = {
             model: Answer,
             include: [{ model: User }, { model: Vote }],
           },
-          { model: Tag },
         ],
       });
       if (!question) {
@@ -58,11 +59,26 @@ const QuestionsController = {
   async create(request, response, next) {
     try {
       const { title, body, tags, spaceId } = request.body;
-      const questionTags = await Tag.findAll({ where: { name: tags } });
+      const numberTags = tags.map((tag) => parseInt(tag));
+      const questionTags = await Tag.findAll({ where: { id: numberTags } });
       const newQuestion = { title, body, userId: response.locals.currentUser.id, spaceId };
       const question = await Question.create(newQuestion);
       await question.addTags(questionTags);
       response.status(201).json(question);
+    } catch (e) {
+      next(e);
+    }
+  },
+  async getRelated(request, response, next) {
+    try {
+      const { spaceId } = request.params;
+      const space = await Space.findOne({
+        where: { id: spaceId },
+        include: { model: Question },
+        limit: 8,
+      });
+      const questions = space.questions;
+      response.status(201).json(questions);
     } catch (e) {
       next(e);
     }

@@ -1,0 +1,55 @@
+.question-link {
+  color: black;
+}
+
+.question-link:hover {
+  color: black;
+}
+
+.comments-button {
+  background-color: inherit;
+  border: none;
+}
+.comments-button:focus {
+  outline: none;
+}
+.card-header {
+  height: 50px;
+}
+.space-card {
+  height: 250px !important;
+  width: 175px !important;
+  border-radius: 10px;
+}
+.space-card-image {
+  height: 60px;
+  width: 60px;
+  margin-top: -50px;
+  border-radius: 100%;
+  border: 3px solid white;
+}
+div.space-card-header:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.space-card-body {
+  padding-bottom: 20px !important;
+}
+.space-card-text {
+  font-size: small;
+}
+.space-card-tagline {
+  margin-top: -50px;
+  height: 80px;
+}
+.text-align-center {
+  text-align: center;
+}
+.space-card-header {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.no-shrink {
+  flex-shrink: 0;
+}

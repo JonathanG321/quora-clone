@@ -15,13 +15,13 @@ function ReplyForm(props) {
     onSubmit(newReply);
   }
   return (
-    <div className="reply-form card-header">
-      <form className="d-flex" onSubmit={handleSubmit}>
-        <div className="col-10 d-flex align-items-center pl-0 pr-0">
+    <div className="reply-form tall card-header">
+      <form className="d-flex align-items-center" onSubmit={handleSubmit}>
+        <div className="col-9 d-flex align-items-center pl-0 pr-0">
           <input className="form-control" type="text" name="body" placeholder="Add a reply..." />
         </div>
-        <div className="col-2 d-flex align-items-center">
-          <input type="submit" className="btn btn-primary" value="Add Reply" />
+        <div className="col-3 pr-0 d-flex align-items-center">
+          <input type="submit" className="btn btn-primary shift" value="Add Reply" />
         </div>
       </form>
     </div>
