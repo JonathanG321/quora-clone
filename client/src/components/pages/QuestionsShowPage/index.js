@@ -21,6 +21,14 @@ class QuestionsShowPage extends Component {
   }
   async componentDidMount() {
     const { id } = this.props.match.params;
+    this.setup(id);
+  }
+  componentDidUpdate(oldProps, oldState) {
+    if (oldProps.match.params.id !== this.props.match.params.id) {
+      this.setup(this.props.match.params.id);
+    }
+  }
+  async setup(id) {
     const question = await Question.one(id);
     const relatedQuestions = await Question.related(question.spaceId);
     this.setState({ question, isLoading: false, relatedQuestions });

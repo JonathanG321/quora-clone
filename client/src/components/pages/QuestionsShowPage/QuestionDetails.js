@@ -29,10 +29,18 @@ class QuestionDetails extends Component {
   }
   async componentDidMount() {
     const { id } = this.state;
+    this.setup(id);
+  }
+  componentDidUpdate(oldProps, oldState) {
+    if (oldProps.id !== this.props.id) {
+      this.setup(this.props.id);
+    }
+  }
+  async setup(id) {
     const question = await Question.one(id);
     this.setVote(id);
     this.setCurrentUser();
-    this.setState({ isLoading: false, dislikes: question.dislikes });
+    this.setState({ ...question, isLoading: false, dislikes: question.dislikes });
   }
   async setCurrentUser() {
     await User.getCurrentUser().then(async (user) => {
