@@ -23,7 +23,7 @@ function SignInPage(props) {
     });
   }
   return (
-    <div className="ml-3 mr-3">
+    <div className="ml-3 mr-3 mt-2">
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
