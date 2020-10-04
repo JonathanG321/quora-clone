@@ -10,8 +10,7 @@
     "db:drop": "dropdb --if-exists --echo quora_clone_dev",
     "db:migrate": "node db/migrations.js",
     "db:seed": "node db/seeds/index.js",
-    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
-    "deploy": "git subtree push --prefix API heroku master"
+    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed"
   },
   "repository": {
     "type": "git",
