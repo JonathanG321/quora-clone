@@ -1,1 +1,0 @@
-web: cd ./API && npm install && npm start
