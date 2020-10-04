@@ -4,6 +4,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const redis = require('redis');
 const cors = require('cors');
+const path = require('path');
 const RedisStore = require('connect-redis')(session);
 require('dotenv').config();
 require('./db/client');
@@ -13,6 +14,7 @@ const apiRouter = require('./routers/api.router');
 
 const app = express();
 
+app.use(express.static('public'));
 app.use(logger('dev'));
 
 app.use(express.urlencoded({ extended: true }));
@@ -53,6 +55,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api', apiRouter);
+
+app.use('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
