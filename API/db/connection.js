@@ -1,5 +1,10 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('postgres://localhost/quora_clone_dev');
+const connection =
+  process.env.NODE_ENV === 'production'
+    ? process.env.DATABASE_URL
+    : 'postgres://localhost/quora_clone_dev';
+
+const sequelize = new Sequelize(connection);
 
 module.exports = sequelize;
