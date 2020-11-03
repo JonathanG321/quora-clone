@@ -1,4 +1,4 @@
-# Quora Clone (js)
+# Quora Clone
 
 ![Home Page](./quora_home.png)
 
