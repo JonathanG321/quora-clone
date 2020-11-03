@@ -8,7 +8,7 @@ To get run this app locally, you'll need a working NodeJS development environmen
 
 This app is set to run on port 3000 by default.
 
-## Technologies
+## Technologies Used
 
 ### Frontend SPA
 
